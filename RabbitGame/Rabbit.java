@@ -1,31 +1,36 @@
+package RabbitGame;
+
 import com.sun.opengl.util.Animator;
 import java.awt.BorderLayout;
 import javax.media.opengl.GLCanvas;
-import javax.swing.JFrame;
+import javax.swing.*;
 import java.io.File;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.JOptionPane;
 
 public class Rabbit extends JFrame {
      private Animator Animation;
     Rabbit(){
-        super("Rabbit");
-        GLCanvas gl = new GLCanvas();
-        RabbitGLEventListener r = new RabbitGLEventListener();
-        Animation=new Animator(gl);
+        super("RabbitGame.Rabbit");
+        GLCanvas glcanvas = new GLCanvas();
+        RabbitGLEventListener listener = new RabbitGLEventListener();
+        Animation=new Animator(glcanvas);
         
         
         
         
         //TODO do What u want Team Members(Farouk,Wafdy,manar,Boda)
-        
-        
-        
-        
-        gl.addGLEventListener(r);
-        getContentPane().add(gl,BorderLayout.CENTER);
+
+
+
+
+        glcanvas.addGLEventListener(listener);
+        glcanvas.addMouseListener(listener);
+        glcanvas.addMouseMotionListener(listener);
+        listener.setGLCanvas(glcanvas);
+
+        getContentPane().add(glcanvas,BorderLayout.CENTER);
         setSize(1500,900);
         setLocationRelativeTo(this);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,8 +39,8 @@ public class Rabbit extends JFrame {
     
     public static void main(String []args){
         String filepath ="Sound/Run-Amok(chosic.com).wav";
-        PlayMusic(filepath);
-        // JOptionPane.showMessageDialog(null,"press button to stop playing");
+        SwingUtilities.invokeLater(() -> PlayMusic(filepath));
+//         JOptionPane.showMessageDialog(null,"press button to stop playing");
 
 
         new Rabbit();

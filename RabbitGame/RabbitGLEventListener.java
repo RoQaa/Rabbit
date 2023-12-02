@@ -1,4 +1,6 @@
+package RabbitGame;
 
+import RabbitGame.AnimListener;
 import Texture.TextureReader;
 
 import java.awt.*;
@@ -10,17 +12,24 @@ import java.awt.event.MouseMotionListener;
 import java.io.IOException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import javax.swing.*;
 
-
-public class RabbitGLEventListener extends AnimListener implements  GLEventListener, MouseMotionListener,MouseListener,KeyListener {
+public class RabbitGLEventListener extends Component  implements  GLEventListener, MouseMotionListener,MouseListener,KeyListener {
     GL gl;
-    double scaleButton = 1.2;
-    int maxWidth =1500,maxHeight = 900;
-    static int currentScreen = 0;
+    GLCanvas glc;
+    protected String assetsFolderName = "Images";
 
-    String textureNames[] = {"Play.png","credits.png","credits.png","credits.png","quit.png","title.png","Menu.png"};
+    double scaleButton = 1.2;
+
+    int responseOption = 0;
+
+    int maxWidth =1500,maxHeight = 900; // cooredinates of ortho
+
+    String currentScreen = "Home";
+    String textureNames[] = {"Play.png","credits.png","credits.png","credits.png","quit.png","title.png","instructions.png","Menu.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int textureIndex[] = new int[textureNames.length];
 
@@ -28,8 +37,7 @@ public class RabbitGLEventListener extends AnimListener implements  GLEventListe
     public void init(GLAutoDrawable gld) {
 
         gl = gld.getGL();
-//         gl.glViewport(0,0,1500,900);
-        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);    //This Will Clear The Background Color To Black
+        gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
@@ -67,25 +75,33 @@ public class RabbitGLEventListener extends AnimListener implements  GLEventListe
         gl = glad.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
-        switch (currentScreen){
-            case 0:
-                DrawHomeBackground(textureIndex.length-1);
+        switchBetweenScreens();
 
-                // drawing the button of Home
-                int marginBetweenbutton = 650 ;
-                for (int i = 0; i < 5; i++) {
-                    drawButtonBackground(200,marginBetweenbutton,scaleButton,i);
-                    marginBetweenbutton-=120;
-                }
-                // drawing the title of Home
-                drawButtonBackground(500,450,0.5,5);
 
-                break;
-            case 1:
-                System.out.println("hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh");
-                DrawHomeBackground(textureIndex.length-1);
-                break;
+    }
+
+    // Wafdy:this method for moving from screen to anthor screen (Navigator)
+   public void switchBetweenScreens(){
+        if(currentScreen=="Home") {
+            DrawParentBackground(textureIndex.length - 1);
+            DrawChildBackground(500,450,0.5,5);
+            int marginBetweenbutton = 650;
+            for (int i = 0; i < 5; i++) {
+                DrawChildBackground(200, marginBetweenbutton, 1.2, i);
+                marginBetweenbutton -= 120;
+            }
+        }else if(currentScreen=="Credits"){
+            DrawParentBackground(textureIndex.length-1);
+
+
         }
+   else if(currentScreen=="How to play"){
+
+            DrawParentBackground(textureIndex.length-1);
+
+            DrawChildBackground(10,540,0.5,6);
+
+    }
 
     }
 
@@ -106,20 +122,7 @@ public class RabbitGLEventListener extends AnimListener implements  GLEventListe
 
     @Override
     public void mouseMoved(MouseEvent e) {
-//        double x = e.getX();
-//        double y = e.getY();
-//        System.out.println("(x , y) = "+ "("+x+","+y+")");
-//        Component c = e.getComponent();
-//
-//        double width = c.getWidth();
-//        double height = c.getHeight();
-//        System.out.println("(width , height) = "+ "("+width+","+height+")");
-//        x3 = (int)((x/width)*600);
-//        y3 = (int)((y/height)*600);
-//        y3 = 600-y3;
-//        System.out.println("(x2 , y2) = "+ "("+x2+","+y2+")");
-//
-//        glc.repaint();
+
         System.out.println(e.getX()+"  "+e.getY());
 
 
@@ -129,65 +132,50 @@ public class RabbitGLEventListener extends AnimListener implements  GLEventListe
 
     @Override
     public void mouseClicked(MouseEvent e) {
-//        int minX = 45, maxX = 310;
-//        int minY = 105, maxY = 185 , Height = maxY-minY;
-//        for (int i = 0; i < 5; i++) {
-//
-//
-//            if(e.getX()>minX &&e.getX()<maxX && e.getY()>minY && e.getY()<maxY){
-//                System.out.println("i = "+i);
-//                if(i==0){
-//                    currentScreen = 1;
-//                }
-//                System.out.println("currentScreen "+ currentScreen);
-//
-//                break;
-//
-//            }
-//            minY+=Height+55;
-//            maxY+=Height+55;
-////            System.out.println(minY+" " +" "+maxY +" i = "+i);
+
         }
 
 
 
     @Override
     public void mousePressed(MouseEvent e) {
-//        int minX = 45, maxX = 310;
-//        int minY = 105, maxY = 185 , Height = maxY-minY;
-//        for (int i = 0; i < 5; i++) {
-//
-//
-//            if(e.getX()>minX &&e.getX()<maxX && e.getY()>minY && e.getY()<maxY ){
-//                System.out.println("i = "+i);
-//                scaleButton=1;
-//                break;
-//
-//            }
-//            minY+=Height+55;
-//            maxY+=Height+55;
-////            System.out.println(minY+" " +" "+maxY +" i = "+i);
-//        }
+        int minX = 45, maxX = 310;
+        int minY = 105, maxY = 185, Height = maxY - minY;
+        for (int i = 0; i < 5; i++) {
+
+
+            if (e.getX() > minX && e.getX() < maxX && e.getY() > minY && e.getY() < maxY) {
+                System.out.println("i = " + i);
+                scaleButton = 1;
+                if(i==4){
+    responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
+            "exit", JOptionPane.ERROR_MESSAGE);
+    if (responseOption == JOptionPane.YES_OPTION) {
+        System.exit(0);
+                }
+    }  else if(i==1){
+
+        currentScreen = "Credits";
+        System.out.println(currentScreen);
+    }
+                else if(i==2){
+
+                    currentScreen = "How to play";
+                    System.out.println(currentScreen);
+                }
+
+                glc.repaint();
+
+            }
+
+            minY += Height + 55;
+            maxY += Height + 55;
+        }
 
     }
-
     @Override
     public void mouseReleased(MouseEvent e) {
-//        int minX = 45, maxX = 310;
-//        int minY = 105, maxY = 185 , Height = maxY-minY;
-//        for (int i = 0; i < 5; i++) {
-//
-//
-//            if(e.getX()>minX &&e.getX()<maxX && e.getY()>minY && e.getY()<maxY){
-//                System.out.println("i = "+i);
-//                scaleButton=1.2;
-//                break;
-//
-//            }
-//            minY+=Height+55;
-//            maxY+=Height+55;
-////            System.out.println(minY+" " +" "+maxY +" i = "+i);
-//        }
+
 
     }
 
@@ -201,22 +189,9 @@ public class RabbitGLEventListener extends AnimListener implements  GLEventListe
 
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
 
-    }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
-
-    public void DrawHomeBackground(int index){
+    public void DrawParentBackground(int index){
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
 
@@ -236,9 +211,9 @@ public class RabbitGLEventListener extends AnimListener implements  GLEventListe
     }
 
     //created by wafdy
-    // this method for draw any backgroundbutton
+    // this method for draw any background
     //your role is to call this method in the display if you want to draw any background
-    public void drawButtonBackground(int x ,int y,double scale,int index){
+    public void DrawChildBackground(int x ,int y,double scale,int index){
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
         gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
         gl.glPushMatrix();
@@ -259,6 +234,25 @@ public class RabbitGLEventListener extends AnimListener implements  GLEventListe
         gl.glPopMatrix();
 
         gl.glDisable(GL.GL_BLEND);
+    }
+
+    public void setGLCanvas(GLCanvas glc) {
+        this.glc = glc;
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
     }
 
 }
