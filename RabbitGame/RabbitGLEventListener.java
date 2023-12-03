@@ -9,12 +9,16 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.io.IOException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Component  implements  GLEventListener, MouseMotionListener,MouseListener,KeyListener {
@@ -40,6 +44,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
         gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -63,8 +68,16 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                 System.out.println(e);
                 e.printStackTrace();
             }
+
         }
+
+        //Farouk:For playing music after loading game
+        String filepath ="Sound/Run-Amok(chosic.com).wav";
+        SwingUtilities.invokeLater(() -> PlayMusic(filepath));
+//         JOptionPane.showMessageDialog(null,"press button to stop playing");
     }
+
+
 
     @Override
     public void display(GLAutoDrawable glad) {
@@ -136,6 +149,9 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
     public void mouseMoved(MouseEvent e) {
 
         System.out.println(e.getX() + "  " + e.getY());
+
+
+
 
     }
 
@@ -267,8 +283,18 @@ glc.repaint();
 
     }
 
+//                glc.repaint();
+
+//            }
+//
+//            minY += Height + 55;
+//            maxY += Height + 55;
+//        }
+
+//    }
     @Override
     public void mouseReleased(MouseEvent e) {
+
 
     }
 
@@ -344,6 +370,28 @@ glc.repaint();
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+    public static void PlayMusic(String location) {
+        try
+        {
+            File musicPath = new File(location);
+            if(musicPath.exists())
+            {
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+                Clip clip =AudioSystem.getClip();
+                clip.open(audioInput);
+                clip.start();
+            }
+            else
+            {
+                System.out.println("Can't find file");
+
+            }
+        }
+        catch (Exception e){
+            System.out.println(e);
+
+        }
     }
 
 }
