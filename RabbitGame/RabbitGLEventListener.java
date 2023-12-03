@@ -9,12 +9,16 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.File;
 import java.io.IOException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Component  implements  GLEventListener, MouseMotionListener,MouseListener,KeyListener {
@@ -64,7 +68,13 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                 System.out.println(e);
                 e.printStackTrace();
             }
+
         }
+
+        //Farouk:For playing music after loading game
+        String filepath ="Sound/Run-Amok(chosic.com).wav";
+        SwingUtilities.invokeLater(() -> PlayMusic(filepath));
+//         JOptionPane.showMessageDialog(null,"press button to stop playing");
     }
 
 
@@ -76,6 +86,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
         switchBetweenScreens();
+
 
 
     }
@@ -253,6 +264,28 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
     @Override
     public void keyReleased(KeyEvent e) {
 
+    }
+    public static void PlayMusic(String location) {
+        try
+        {
+            File musicPath = new File(location);
+            if(musicPath.exists())
+            {
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+                Clip clip =AudioSystem.getClip();
+                clip.open(audioInput);
+                clip.start();
+            }
+            else
+            {
+                System.out.println("Can't find file");
+
+            }
+        }
+        catch (Exception e){
+            System.out.println(e);
+
+        }
     }
 
 }
