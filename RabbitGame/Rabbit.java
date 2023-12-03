@@ -44,6 +44,5 @@ public class Rabbit extends JFrame {
         new Rabbit();
     }
 
-
 }
 

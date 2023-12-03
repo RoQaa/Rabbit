@@ -34,7 +34,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
 
     String currentScreen = "Home";
-    String textureNames[] = {"background.png","credits.png","credits.png","credits.png","quit.png","title.png","Level.png","Hole.png","Hole2.png","Hole3.png","Menu.png","Display.png"};
+    String textureNames[] = {"background.png","credits.png","credits.png","credits.png","quit.png","title.png","Level.png","fLevel.png","sLevel.png","lLevel.png","Menu.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int textureIndex[] = new int[textureNames.length];
 
@@ -104,11 +104,11 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
             case "Game":
                 if (level < 4) { //easy
-                    DrawParentBackground(0);
+                    DrawParentBackground(7);
                 } else if (level < 7) {
-                    DrawParentBackground(0);
+                    DrawParentBackground(8);
                 } else  {
-                    DrawParentBackground(0);
+                    DrawParentBackground(9);
                 }
                 break;
 
