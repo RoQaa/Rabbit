@@ -34,7 +34,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
 
     String currentScreen = "Home";
-    String textureNames[] = {"Play.png","credits.png","credits.png","credits.png","quit.png","title.png","Level.png","Hole.png","Hole2.png","Hole3.png","Menu.png"};
+    String textureNames[] = {"Play.png","credits.png","credits.png","credits.png","quit.png","title.png","Level.png","Hole.png","Hole2.png","Hole3.png","Menu.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int textureIndex[] = new int[textureNames.length];
 
@@ -95,13 +95,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
         //draw page
         switch (currentScreen) {
             case "Home": {
-                DrawParentBackground(textureIndex.length - 1);
-                DrawChildBackground(500, 450, 0.5, 5);
-                int marginBetweenbutton = 650;
-                for (int i = 0; i < 5; i++) {
-                    DrawChildBackground(200, marginBetweenbutton, 1.2, i);
-                    marginBetweenbutton -= 120;
-                }
+                DrawParentBackground(11);
                 break;
             }
             case "Play":
@@ -119,11 +113,11 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                 break;
 
             case "Credits":
-                DrawParentBackground(textureIndex.length - 1);
+                DrawParentBackground(10);
                 break;
             case "How to play":
-                DrawParentBackground(textureIndex.length - 1);
-                DrawChildBackground(10, 540, 0.5, 6);
+                DrawParentBackground(10);
+
                 break;
 
         }
@@ -161,8 +155,21 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
       //action to nvegite
         switch (currentScreen) {
             case "Home":
-                if (e.getX() > 45 && e.getX() < 310 && e.getY() > 105 && e.getY() < 185) {
+                if (e.getX() > 60 && e.getX() < 375 && e.getY() > 125 && e.getY() < 195) {
                     currentScreen = "Play";
+                }
+                if (e.getX() > 60 && e.getX() < 375 && e.getY() > 220 && e.getY() < 290) {
+                    currentScreen = "Credits";
+                }
+                if (e.getX() > 60 && e.getX() < 375 && e.getY() > 310 && e.getY() < 380) {
+                    currentScreen = "How to play";
+                }
+                if (e.getX() > 60 && e.getX() < 375 && e.getY() > 400 && e.getY() < 470) {
+                    responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
+                            "Exit", JOptionPane.ERROR_MESSAGE);
+                    if (responseOption == JOptionPane.YES_OPTION) {
+                        System.exit(0);
+                    }
                 }
                 break;
 //back button
@@ -214,6 +221,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                     currentScreen = "Play";
                 }
                 break;
+
         }
 glc.repaint();
         //game(1); --> 5 hit 20s
