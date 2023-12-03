@@ -34,7 +34,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
 
     String currentScreen = "Home";
-    String textureNames[] = {"Play.png","credits.png","credits.png","credits.png","quit.png","title.png","Level.png","Hole.png","Hole2.png","Hole3.png","Menu.png","Display.png"};
+    String textureNames[] = {"background.png","credits.png","credits.png","credits.png","quit.png","title.png","Level.png","Hole.png","Hole2.png","Hole3.png","Menu.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int textureIndex[] = new int[textureNames.length];
 
@@ -72,8 +72,8 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
         }
 
         //Farouk:For playing music after loading game
-        String filepath ="Sound/Run-Amok(chosic.com).wav";
-        SwingUtilities.invokeLater(() -> PlayMusic(filepath));
+//        String filepath ="Sound/Run-Amok(chosic.com).wav";
+//        SwingUtilities.invokeLater(() -> PlayMusic(filepath));
 //         JOptionPane.showMessageDialog(null,"press button to stop playing");
     }
 
@@ -104,11 +104,11 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
             case "Game":
                 if (level < 4) { //easy
-                    DrawParentBackground(7);
+                    DrawParentBackground(0);
                 } else if (level < 7) {
-                    DrawParentBackground(8);
+                    DrawParentBackground(0);
                 } else  {
-                    DrawParentBackground(9);
+                    DrawParentBackground(0);
                 }
                 break;
 
