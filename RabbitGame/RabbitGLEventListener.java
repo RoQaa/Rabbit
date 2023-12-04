@@ -34,7 +34,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
 
     String currentScreen = "Home";
-    String textureNames[] = {"background.png","Diffuclty.png","credits.png","credits.png","quit.png","title.png","Level.png","fLevel.png","sLevel.png","lLevel.png","Menu.png","Display.png"};
+    String textureNames[] = {"background.png","Diffuclty.png","Pause.png","credits.png","quit.png","title.png","Level.png","ffLevel.png","ssLevel.png","llLevel.png","Menu.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int textureIndex[] = new int[textureNames.length];
 
@@ -107,9 +107,9 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
             case "Game":
                 if (level < 4) { //easy
-                    DrawParentBackground(7);
+                    DrawParentBackground(9);
                 } else if (level < 7) {
-                    DrawParentBackground(8);
+                    DrawParentBackground(9);
                 } else  {
                     DrawParentBackground(9);
                 }
@@ -120,6 +120,10 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                 break;
             case "How to play":
                 DrawParentBackground(10);
+
+                break;
+            case "Pause":
+                DrawParentBackground(2);
 
                 break;
 
@@ -239,11 +243,28 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                     level = 9;
                 }
                 break;
-//            case "Game":
-//                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
-//                    currentScreen = "Play";
+                //Game page
+            case "Game":
+                if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
+                    currentScreen = "Pause";
+                }
+                break;
+                //Pause page
+            case "Pause":
+//                if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
+//                    currentScreen = "Pause";
 //                }
-//                break;
+                if (e.getX() > 605 && e.getX() < 800 && e.getY() > 470 && e.getY() < 535) {
+                    currentScreen = "Home";
+                }
+                if (e.getX() > 605 && e.getX() < 800 && e.getY() > 575 && e.getY() < 645) {
+                    responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
+                            "Exit", JOptionPane.ERROR_MESSAGE);
+                    if (responseOption == JOptionPane.YES_OPTION) {
+                        System.exit(0);
+                    }
+                }
+                break;
 
         }
 glc.repaint();
