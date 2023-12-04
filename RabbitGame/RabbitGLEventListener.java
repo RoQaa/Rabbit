@@ -107,9 +107,9 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
             case "Game":
                 if (level < 4) { //easy
-                    DrawParentBackground(9);
+                    DrawParentBackground(8);
                 } else if (level < 7) {
-                    DrawParentBackground(9);
+                    DrawParentBackground(8);
                 } else  {
                     DrawParentBackground(9);
                 }
@@ -254,10 +254,10 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 //                if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
 //                    currentScreen = "Pause";
 //                }
-                if (e.getX() > 605 && e.getX() < 800 && e.getY() > 470 && e.getY() < 535) {
+                if (e.getX() > 595 && e.getX() < 790 && e.getY() > 485 && e.getY() < 555) {
                     currentScreen = "Home";
                 }
-                if (e.getX() > 605 && e.getX() < 800 && e.getY() > 575 && e.getY() < 645) {
+                if (e.getX() > 595 && e.getX() < 790 && e.getY() > 590 && e.getY() < 660) {
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
                             "Exit", JOptionPane.ERROR_MESSAGE);
                     if (responseOption == JOptionPane.YES_OPTION) {
