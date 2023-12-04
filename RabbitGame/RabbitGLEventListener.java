@@ -34,7 +34,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
 
     String currentScreen = "Home";
-    String textureNames[] = {"background.png","credits.png","credits.png","credits.png","quit.png","title.png","Level.png","fLevel.png","sLevel.png","lLevel.png","Menu.png","Display.png"};
+    String textureNames[] = {"background.png","Diffuclty.png","credits.png","credits.png","quit.png","title.png","Level.png","fLevel.png","sLevel.png","lLevel.png","Menu.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int textureIndex[] = new int[textureNames.length];
 
@@ -99,6 +99,9 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                 break;
             }
             case "Play":
+                DrawParentBackground(1);
+                break;
+            case "Level":
                 DrawParentBackground(6);
                 break;
 
@@ -154,6 +157,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
         //abdelfattah
       //action to nvegite
         switch (currentScreen) {
+            //Home page
             case "Home":
                 if (e.getX() > 60 && e.getX() < 375 && e.getY() > 125 && e.getY() < 195) {
                     currentScreen = "Play";
@@ -172,11 +176,31 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                     }
                 }
                 break;
-//back button
+//Diffuclty page
             case "Play":
-
-                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
+                //back button
+                if (e.getX() > 474 && e.getX() < 560 && e.getY() > 710 && e.getY() < 790) {
                     currentScreen = "Home";
+                }
+                if (e.getX() > 590 && e.getX() < 915 && e.getY() > 230 && e.getY() < 350) {
+                    currentScreen = "Level";
+
+                }
+                if (e.getX() > 590 && e.getX() < 915 && e.getY() > 405 && e.getY() < 520) {
+                currentScreen = "Level";
+
+                }
+                if (e.getX() > 590 && e.getX() < 915 && e.getY() > 600 && e.getY() < 703) {
+                    currentScreen = "Level";
+
+                }
+
+                break;
+                //Level Selection
+            case "Level":
+                //back button
+                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
+                    currentScreen = "Play";
                 }
                 if (e.getX() > 440 && e.getX() < 630 && e.getY() > 280 && e.getY() < 390) {
                     currentScreen = "Game";
@@ -215,12 +239,11 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                     level = 9;
                 }
                 break;
-//
-            case "Game":
-                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
-                    currentScreen = "Play";
-                }
-                break;
+//            case "Game":
+//                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
+//                    currentScreen = "Play";
+//                }
+//                break;
 
         }
 glc.repaint();
