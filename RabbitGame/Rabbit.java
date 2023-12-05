@@ -1,37 +1,37 @@
 package RabbitGame;
 
 import com.sun.opengl.util.Animator;
+import com.sun.opengl.util.FPSAnimator;
+
 import java.awt.BorderLayout;
 import javax.media.opengl.GLCanvas;
 import javax.swing.*;
 
 
 public class Rabbit extends JFrame {
-     private Animator Animation;
+
     Rabbit(){
-        super("RabbitGame.Rabbit");
-        GLCanvas glcanvas = new GLCanvas();
+        GLCanvas glcanvas;
+        Animator animator;
+
         RabbitGLEventListener listener = new RabbitGLEventListener();
-        Animation=new Animator(glcanvas);
-        
-        
-        
-        
-        //TODO do What u want Team Members(Farouk,Wafdy,manar,Boda)
-
-
-
-
+        glcanvas = new GLCanvas();
         glcanvas.addGLEventListener(listener);
+        glcanvas.addKeyListener(listener);
         glcanvas.addMouseListener(listener);
         glcanvas.addMouseMotionListener(listener);
-        listener.setGLCanvas(glcanvas);
+        getContentPane().add(glcanvas, BorderLayout.CENTER);
+        animator = new FPSAnimator(2);
+        animator.add(glcanvas);
+        animator.start();
 
-        getContentPane().add(glcanvas,BorderLayout.CENTER);
-        setSize(1500,900);
-        setLocationRelativeTo(this);
+        setTitle("Rabbit");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(1500, 900);
+        setLocationRelativeTo(null);
         setVisible(true);
+        setFocusable(true);
+        glcanvas.requestFocus();
  }
     
     public static void main(String []args){
