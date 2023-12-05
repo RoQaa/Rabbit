@@ -6,15 +6,76 @@ package RabbitGame;/*
 
 
 import java.awt.*;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
+import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 
 
 public abstract class Assets extends Component implements GLEventListener, MouseMotionListener, MouseListener,KeyListener {
             //Secret path for Images
         protected String assetsFolderName = "Images";
+        protected String assetsFolderRabbit = "Rabbits";
 
-    
+
+
+
+
+
+
+
+
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    @Override
+    public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
+
+    }
+
+    @Override
+    public void displayChanged(GLAutoDrawable glad, boolean bln, boolean bln1) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+
+    }
+
+
+
 }
