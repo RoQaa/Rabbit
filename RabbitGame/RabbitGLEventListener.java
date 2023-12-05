@@ -34,7 +34,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
 
     String currentScreen = "Home";
-    String textureNames[] = {"background.png","Diffuclty.png","Pause.png","credits.png","quit.png","title.png","Level.png","ffLevel.png","ssLevel.png","llLevel.png","Menu.png","Display.png"};
+    String textureNames[] = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int textureIndex[] = new int[textureNames.length];
 
@@ -88,42 +88,42 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
         switchBetweenScreens();
 
     }
-
+//abdelfattah:Edit switch
     // Wafdy:this method for moving from screen to anthor screen (Navigator)
     public void switchBetweenScreens() {
         //abdelfattah
         //draw page
         switch (currentScreen) {
             case "Home": {
-                DrawParentBackground(11);
+                DrawParentBackground(5);
                 break;
             }
             case "Play":
-                DrawParentBackground(1);
+                DrawParentBackground(0);
                 break;
             case "Level":
-                DrawParentBackground(6);
+                DrawParentBackground(2);
                 break;
 
             case "Game":
                 if (level < 4) { //easy
-                    DrawParentBackground(8);
+                    DrawParentBackground(3);
                 } else if (level < 7) {
-                    DrawParentBackground(8);
+                    DrawParentBackground(3);
                 } else  {
-                    DrawParentBackground(9);
+                    DrawParentBackground(4);
                 }
                 break;
 
             case "Credits":
-                DrawParentBackground(10);
+                DrawParentBackground(4);
                 break;
             case "How to play":
-                DrawParentBackground(10);
+                DrawParentBackground(4);
 
                 break;
             case "Pause":
-                DrawParentBackground(2);
+                DrawParentBackground(1);
 
                 break;
 
