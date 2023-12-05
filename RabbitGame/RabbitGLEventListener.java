@@ -1,9 +1,6 @@
 package RabbitGame;
 
 import Texture.TextureReader;
-
-
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -18,21 +15,20 @@ import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets  {
  
-    GLCanvas glc;
+ //   GLCanvas glc;
     int responseOption = 0;
     int maxWidth = 1500, maxHeight = 900, level; // cooredinates of ortho
-
-
-
-
-
-
-
-    String currentScreen = "Home";
+    int x = maxWidth / 2, y = maxHeight / 2;//0-1490 , 0-890
+    int animationIndex=0;
+    String currentScreen = "Game";
     String textureNames[] = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     int textures[] = new int[textureNames.length];
 
+
+    String textureNamesRabbit[] = {"Rabbits(1).png","Rabbits(2).png","Rabbits(3).png","Rabbits(4).png"};
+    TextureReader.Texture[] textureRabbit = new TextureReader.Texture[textureNamesRabbit.length];
+    int texturesRabbit[] = new int[textureNamesRabbit.length];
 
     public void init(GLAutoDrawable gld) {
 
@@ -40,8 +36,9 @@ public class RabbitGLEventListener extends Assets  {
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         //Map images to Memory
-
         StoreImages(gl,textureNames,texture,textures,assetsFolderName);
+        StoreImages(gl,textureNamesRabbit,textureRabbit,texturesRabbit,assetsFolderRabbit);
+
 
     }
 
@@ -56,6 +53,7 @@ public class RabbitGLEventListener extends Assets  {
         switchBetweenScreens(gl);
 
     }
+
     //abdelfattah:Edit switch
     // Wafdy:this method for moving from screen to anthor screen (Navigator)
     public void switchBetweenScreens(GL gl) {
@@ -76,6 +74,20 @@ public class RabbitGLEventListener extends Assets  {
             case "Game":
                 if (level < 4) { //easy
                     DrawParentBackground(gl,3);
+
+                    animationIndex++;
+                    animationIndex=animationIndex%4;
+
+
+
+                    DrawRabbitInHole(gl,750,150,animationIndex,10); //out
+                    DrawRabbitInHole(gl,600,100,animationIndex,10); //out
+                    DrawRabbitInHole(gl,450,150,animationIndex,10); //out
+                    DrawRabbitInHole(gl,300,150,animationIndex,10); //out
+                    DrawRabbitInHole(gl,150,150,animationIndex,10); //out
+                    DrawRabbitInHole(gl,50,150,animationIndex,10); //out
+
+
                 } else if (level < 7) {
                     DrawParentBackground(gl,3);
                 } else  {
@@ -99,28 +111,12 @@ public class RabbitGLEventListener extends Assets  {
 
     }
 
-    @Override
-    public void reshape(GLAutoDrawable glad, int i, int i1, int i2, int i3) {
-
-    }
-
-    @Override
-    public void displayChanged(GLAutoDrawable glad, boolean bln, boolean bln1) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
 
     @Override
     public void mouseMoved(MouseEvent e) {
-
-        System.out.println("("+e.getX() + " , " + e.getY()+")");
-
-
-
+//        int cordy=900*(e.getY())-900;
+//        int cordx=e.getX()*1500;
+//        System.out.println("("+e.getX() + " , "+cordy + ")");
 
     }
 
@@ -235,46 +231,87 @@ public class RabbitGLEventListener extends Assets  {
                 break;
 
         }
-glc.repaint();
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
+//glc.repaint();
 
     }
 
 
 
-    @Override
-    public void keyTyped(KeyEvent e) {
+    public void DrawParentBackground(GL gl,int index) {
+        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
 
+        gl.glBegin(GL.GL_QUADS);
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+
+        gl.glDisable(GL.GL_BLEND);
     }
 
-    @Override
-    public void keyPressed(KeyEvent e) {
 
+
+    //created by wafdy
+    // this method for draw any background
+    //your role is to call this method in the display if you want to draw any background
+    public void DrawChildBackground(GL gl,int x, int y, double scale, int index) {
+        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
+        gl.glPushMatrix();
+        gl.glScaled(scale, scale, 1);
+        gl.glTranslated(x / (maxWidth / 2.0) - 0.9, y / (maxHeight / 2.0) - 0.9, 1);
+
+        gl.glBegin(GL.GL_QUADS);
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
+    public void DrawRabbitInHole(GL gl, int x, int y, int index, float scale) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, texturesRabbit[index]);	// Turn Blending On
 
+        gl.glPushMatrix();
+        gl.glTranslated(x / (maxWidth / 2.0) - 0.9, y / (maxHeight / 2.0) - 0.9, 0);
+        gl.glScaled(0.1 * scale, 0.1 * scale, 1);
+        //  gl.glRotated(180, 0, 0, 1);
+        //System.out.println(x +" " + y);
+        gl.glBegin(GL.GL_QUADS);
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
     }
 
+//    public void setGLCanvas(GLCanvas glc) {
+//        this.glc = glc;
+//    }
     public static void StoreImages(GL gl, String[] textureNames, TextureReader.Texture[] texture, int[] textures, String FolderPath) {
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
@@ -304,56 +341,6 @@ glc.repaint();
         }
 
     }
-    public void DrawParentBackground(GL gl,int index) {
-        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
-
-        gl.glBegin(GL.GL_QUADS);
-        // Front Face
-        gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(1.0f, 1.0f, -1.0f);
-        gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
-        gl.glEnd();
-
-        gl.glDisable(GL.GL_BLEND);
-    }
-
-    //created by wafdy
-    // this method for draw any background
-    //your role is to call this method in the display if you want to draw any background
-    public void DrawChildBackground(GL gl,int x, int y, double scale, int index) {
-        gl.glEnable(GL.GL_BLEND);	// Turn Blending On
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
-        gl.glPushMatrix();
-        gl.glScaled(scale, scale, 1);
-        gl.glTranslated(x / (maxWidth / 2.0) - 0.9, y / (maxHeight / 2.0) - 0.9, 1);
-
-        gl.glBegin(GL.GL_QUADS);
-        // Front Face
-        gl.glTexCoord2f(0.0f, 0.0f);
-        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 0.0f);
-        gl.glVertex3f(1.0f, -1.0f, -1.0f);
-        gl.glTexCoord2f(1.0f, 1.0f);
-        gl.glVertex3f(1.0f, 1.0f, -1.0f);
-        gl.glTexCoord2f(0.0f, 1.0f);
-        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
-        gl.glEnd();
-        gl.glPopMatrix();
-
-        gl.glDisable(GL.GL_BLEND);
-    }
-
-    public void setGLCanvas(GLCanvas glc) {
-        this.glc = glc;
-    }
-
-
     public static void PlayMusic(String location) {
         try
         {
