@@ -1,80 +1,48 @@
 package RabbitGame;
 
-import RabbitGame.AnimListener;
 import Texture.TextureReader;
 
-import java.awt.*;
+
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.IOException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLCanvas;
-import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 
-public class RabbitGLEventListener extends Component  implements  GLEventListener, MouseMotionListener,MouseListener,KeyListener {
-    GL gl;
+public class RabbitGLEventListener extends Assets  {
+ 
     GLCanvas glc;
-    protected String assetsFolderName = "Images";
-
-    double scaleButton = 1.2;
-
     int responseOption = 0;
+    int maxWidth = 1500, maxHeight = 900, level; // cooredinates of ortho
 
-      int maxWidth = 1500, maxHeight = 900, level; // cooredinates of ortho
+
+
+
+
 
 
     String currentScreen = "Home";
     String textureNames[] = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
-    int textureIndex[] = new int[textureNames.length];
+    int textures[] = new int[textureNames.length];
 
 
     public void init(GLAutoDrawable gld) {
 
-        gl = gld.getGL();
+        GL gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+        //Map images to Memory
 
-        gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
-        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+        StoreImages(gl,textureNames,texture,textures,assetsFolderName);
 
-        //number of textures,array to hold the indeces
-        gl.glGenTextures(textureNames.length, textureIndex, 0);
-
-        for (int i = 0; i < textureNames.length; i++) {
-            try {
-                texture[i] = TextureReader.readTexture(assetsFolderName + "//" + textureNames[i], true);
-                gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[i]);
-
-                new GLU().gluBuild2DMipmaps(
-                        GL.GL_TEXTURE_2D,
-                        GL.GL_RGBA, // Internal Texel Format,
-                        texture[i].getWidth(), texture[i].getHeight(),
-                        GL.GL_RGBA, // External format from image,
-                        GL.GL_UNSIGNED_BYTE,
-                        texture[i].getPixels() // Imagedata
-                );
-            } catch (IOException e) {
-                System.out.println(e);
-                e.printStackTrace();
-            }
-
-        }
-
-        //Farouk:For playing music after loading game
-//        String filepath ="Sound/Run-Amok(chosic.com).wav";
-//        SwingUtilities.invokeLater(() -> PlayMusic(filepath));
-//         JOptionPane.showMessageDialog(null,"press button to stop playing");
     }
 
 
@@ -82,48 +50,48 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
     @Override
     public void display(GLAutoDrawable glad) {
 
-        gl = glad.getGL();
+        GL  gl = glad.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
-        switchBetweenScreens();
+        switchBetweenScreens(gl);
 
     }
-//abdelfattah:Edit switch
+    //abdelfattah:Edit switch
     // Wafdy:this method for moving from screen to anthor screen (Navigator)
-    public void switchBetweenScreens() {
+    public void switchBetweenScreens(GL gl) {
         //abdelfattah
         //draw page
         switch (currentScreen) {
             case "Home": {
-                DrawParentBackground(5);
+                DrawParentBackground(gl,5);
                 break;
             }
             case "Play":
-                DrawParentBackground(0);
+                DrawParentBackground(gl,0);
                 break;
             case "Level":
-                DrawParentBackground(2);
+                DrawParentBackground(gl,2);
                 break;
 
             case "Game":
                 if (level < 4) { //easy
-                    DrawParentBackground(3);
+                    DrawParentBackground(gl,3);
                 } else if (level < 7) {
-                    DrawParentBackground(3);
+                    DrawParentBackground(gl,3);
                 } else  {
-                    DrawParentBackground(4);
+                    DrawParentBackground(gl,4);
                 }
                 break;
 
             case "Credits":
-                DrawParentBackground(4);
+                DrawParentBackground(gl,4);
                 break;
             case "How to play":
-                DrawParentBackground(4);
+                DrawParentBackground(gl,4);
 
                 break;
             case "Pause":
-                DrawParentBackground(1);
+                DrawParentBackground(gl,1);
 
                 break;
 
@@ -149,7 +117,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
     @Override
     public void mouseMoved(MouseEvent e) {
 
-        System.out.println(e.getX() + "  " + e.getY());
+        System.out.println("("+e.getX() + " , " + e.getY()+")");
 
 
 
@@ -159,7 +127,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
     @Override
     public void mouseClicked(MouseEvent e) {
         //abdelfattah
-      //action to nvegite
+      //action to navigate
         switch (currentScreen) {
             //Home page
             case "Home":
@@ -180,7 +148,7 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
                     }
                 }
                 break;
-//Diffuclty page
+        //Difficulty page
             case "Play":
                 //back button
                 if (e.getX() > 474 && e.getX() < 560 && e.getY() > 710 && e.getY() < 790) {
@@ -268,82 +236,12 @@ public class RabbitGLEventListener extends Component  implements  GLEventListene
 
         }
 glc.repaint();
-        //game(1); --> 5 hit 20s
-        //game(2); ---> 5 hits 18s
-        //game(3); ---> 5 hits 16s
-        // game(4) --> 7
+
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-//        int minX = 45, maxX = 310;
-//        int minY = 105, maxY = 185, Height = maxY - minY;
-//        for (int i = 0; i < 5; i++) {
-//
-//            if (e.getX() > minX && e.getX() < maxX && e.getY() > minY && e.getY() < maxY) {
-//                System.out.println("i = " + i);
-//                scaleButton = 1;
-//                if (i == 4) {
-//                    responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
-//                            "exit", JOptionPane.ERROR_MESSAGE);
-//                    if (responseOption == JOptionPane.YES_OPTION) {
-//                        System.exit(0);
-//                    }
-//                } else if (i == 1) {
-//
-//                    currentScreen = "Credits";
-//                    System.out.println(currentScreen);
-//                } else if (i == 2) {
-//
-//                    currentScreen = "How to play";
-//                    System.out.println(currentScreen);
-//                } else if (i == 3) {
-//                    currentScreen = "Diffculty";
-//                    minY = 105;
-//                    maxY = 185;
-//                    for (int j = 0; j < 3; j++) {
-//                        if (e.getX() > minX && e.getX() < maxX && e.getY() > minY && e.getY() < maxY) {
-//
-////                        System.out.println(currentScreen);
-//                            if (j == 0) {
-//
-//                                currentScreen = "Easy";
-//                                System.out.println(currentScreen);
-//                            } else if (j == 1) {
-//
-//                                currentScreen = "Normal";
-//                                System.out.println(currentScreen);
-//
-//                            } else if (j == 2) {
-//
-//                                currentScreen = "Hard";
-//                                System.out.println(currentScreen);
-//
-//                            }
-//                        }
-//                        minY += Height + 55;
-//                        maxY += Height + 55;
-//                    }
-//
-//                }
-//
-//            }
-//
-//            minY += Height + 55;
-//            maxY += Height + 55;
-//        }
-
     }
-
-//                glc.repaint();
-
-//            }
-//
-//            minY += Height + 55;
-//            maxY += Height + 55;
-//        }
-
-//    }
     @Override
     public void mouseReleased(MouseEvent e) {
 
@@ -360,9 +258,55 @@ glc.repaint();
 
     }
 
-    public void DrawParentBackground(int index) {
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+
+    }
+
+    public static void StoreImages(GL gl, String[] textureNames, TextureReader.Texture[] texture, int[] textures, String FolderPath) {
+        gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
+        // gl.glGenTextures(textureNames.length, textures, 0);
+        gl.glGenTextures(textureNames.length, textures, 0);
+        try {
+
+            for (int i = 0; i < textureNames.length; i++) {
+
+                texture[i] = TextureReader.readTexture(FolderPath + "//" + textureNames[i], true);
+                gl.glBindTexture(GL.GL_TEXTURE_2D, textures[i]);
+
+//                mipmapsFromPNG(gl, new GLU(), texture[i]);
+                new GLU().gluBuild2DMipmaps(
+                        GL.GL_TEXTURE_2D,
+                        GL.GL_RGBA, // Internal Texel Format,
+                        texture[i].getWidth(), texture[i].getHeight(),
+                        GL.GL_RGBA, // External format from image,
+                        GL.GL_UNSIGNED_BYTE,
+                        texture[i].getPixels() // Imagedata
+                );
+            }
+        } catch (IOException e) {
+            System.out.println(e);
+            e.printStackTrace();
+        }
+
+    }
+    public void DrawParentBackground(GL gl,int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
 
         gl.glBegin(GL.GL_QUADS);
         // Front Face
@@ -382,9 +326,9 @@ glc.repaint();
     //created by wafdy
     // this method for draw any background
     //your role is to call this method in the display if you want to draw any background
-    public void DrawChildBackground(int x, int y, double scale, int index) {
+    public void DrawChildBackground(GL gl,int x, int y, double scale, int index) {
         gl.glEnable(GL.GL_BLEND);	// Turn Blending On
-        gl.glBindTexture(GL.GL_TEXTURE_2D, textureIndex[index]);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, textures[index]);
         gl.glPushMatrix();
         gl.glScaled(scale, scale, 1);
         gl.glTranslated(x / (maxWidth / 2.0) - 0.9, y / (maxHeight / 2.0) - 0.9, 1);
@@ -409,20 +353,7 @@ glc.repaint();
         this.glc = glc;
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
 
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
     public static void PlayMusic(String location) {
         try
         {

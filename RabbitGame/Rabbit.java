@@ -4,10 +4,7 @@ import com.sun.opengl.util.Animator;
 import java.awt.BorderLayout;
 import javax.media.opengl.GLCanvas;
 import javax.swing.*;
-import java.io.File;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
+
 
 public class Rabbit extends JFrame {
      private Animator Animation;

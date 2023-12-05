@@ -5,15 +5,14 @@ package RabbitGame;/*
  */
 
 
+import java.awt.*;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import javax.media.opengl.GLEventListener;
 
-/**
- *
- * @author Tyba
- */
 
-public abstract class AnimListener implements GLEventListener, KeyListener {
+public abstract class Assets extends Component implements GLEventListener, MouseMotionListener, MouseListener,KeyListener {
             //Secret path for Images
         protected String assetsFolderName = "Images";
 
