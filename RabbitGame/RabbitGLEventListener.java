@@ -3,6 +3,7 @@ package RabbitGame;
 import Texture.TextureReader;
 
 
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +19,8 @@ import javax.swing.*;
 public class RabbitGLEventListener extends Assets  {
  
  //   GLCanvas glc;
-
+    int cordMouseX;
+    int cordMouseY;
 
     int delay, randomHole ;
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
@@ -107,7 +109,7 @@ public class RabbitGLEventListener extends Assets  {
                     drawGame(gl);
                     animationIndex++;
                     animationIndex=animationIndex%4;
-
+                DrawHammer(gl,cordMouseX,cordMouseY,0,9);
 
 
 
@@ -138,7 +140,17 @@ public class RabbitGLEventListener extends Assets  {
     @Override
     public void mouseMoved(MouseEvent e) {
 
-
+        double frameX = e.getX();
+        double frameY = e.getY();
+      //  System.out.println("(x , y) = "+ "("+x+","+y+")");
+        Component c = e.getComponent();
+        double width = c.getWidth();
+        double height = c.getHeight();
+        System.out.println("(width , height) = "+ "("+width+","+height+")");
+        cordMouseX = (int)((frameX/width)*600); // hebat el canves
+        cordMouseY = (int)((frameY/height)*600); //hesbat el canves
+        cordMouseY = 600-cordMouseY;
+        System.out.println("(X1 , y1) = "+ "("+cordMouseX+","+cordMouseY+")");
 
     }
 
