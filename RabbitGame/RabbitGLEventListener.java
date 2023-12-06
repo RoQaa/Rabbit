@@ -1,12 +1,14 @@
 package RabbitGame;
 
 import Texture.TextureReader;
+
+
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCanvas;
+
 import javax.media.opengl.glu.GLU;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -16,6 +18,8 @@ import javax.swing.*;
 public class RabbitGLEventListener extends Assets  {
  
  //   GLCanvas glc;
+
+
     int delay, randomHole ;
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
 
@@ -24,24 +28,30 @@ public class RabbitGLEventListener extends Assets  {
     int x = maxWidth / 2, y = maxHeight / 2;//0-1490 , 0-890
     int animationIndex=0;
     String currentScreen = "Game";
-    String textureNames[] = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","Display.png"};
+    String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","Display.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
-    int textures[] = new int[textureNames.length];
+    int []textures = new int[textureNames.length];
 
 
-    String textureNamesRabbit[] = {"Rabbits(1).png","Rabbits(2).png","Rabbits(3).png","Rabbits(4).png"};
+    String[] textureNamesRabbit = {"Rabbits(1).png","Rabbits(2).png","Rabbits(3).png","Rabbits(4).png"};
     TextureReader.Texture[] textureRabbit = new TextureReader.Texture[textureNamesRabbit.length];
-    int texturesRabbit[] = new int[textureNamesRabbit.length];
+    int[] texturesRabbit = new int[textureNamesRabbit.length];
+
+
+
+    String[] textureNamesHammer = {"Hammer(1).png","Hammer(2).png","Hammer(3).png","Hammer(4).png","Dizzy(1).png","Dizzy(2).png","Dizzy(3).png"};
+    TextureReader.Texture[] textureHammer = new TextureReader.Texture[textureNamesHammer.length];
+    int[] texturesHammer = new int[textureNamesHammer.length];
 
     public void init(GLAutoDrawable gld) {
 
-        GL gl = gld.getGL();
+       GL  gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
         //Map images to Memory
         StoreImages(gl,textureNames,texture,textures,assetsFolderName);
         StoreImages(gl,textureNamesRabbit,textureRabbit,texturesRabbit,assetsFolderRabbit);
-
+        StoreImages(gl,textureNamesHammer,textureHammer,texturesHammer,assetsFolderHammer);
 
     }
 
@@ -98,9 +108,7 @@ public class RabbitGLEventListener extends Assets  {
                     animationIndex++;
                     animationIndex=animationIndex%4;
 
-//                    DrawRabbitInHole(gl,300,150,animationIndex,10); //out
-//                    DrawRabbitInHole(gl,150,150,animationIndex,10); //out
-//                    DrawRabbitInHole(gl,50,150,animationIndex,10); //out
+
 
 
                 } else if (level < 7) {
@@ -129,9 +137,8 @@ public class RabbitGLEventListener extends Assets  {
 
     @Override
     public void mouseMoved(MouseEvent e) {
-//        int cordy=900*(e.getY())-900;
-//        int cordx=e.getX()*1500;
-//        System.out.println("("+e.getX() + " , "+cordy + ")");
+
+
 
     }
 
@@ -153,7 +160,7 @@ public class RabbitGLEventListener extends Assets  {
                 }
                 if (e.getX() > 60 && e.getX() < 375 && e.getY() > 400 && e.getY() < 470) {
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
-                            "Exit", JOptionPane.ERROR_MESSAGE);
+                            "Exit", JOptionPane.YES_NO_OPTION);
                     if (responseOption == JOptionPane.YES_OPTION) {
                         System.exit(0);
                     }
@@ -238,7 +245,7 @@ public class RabbitGLEventListener extends Assets  {
                 }
                 if (e.getX() > 595 && e.getX() < 790 && e.getY() > 590 && e.getY() < 660) {
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
-                            "Exit", JOptionPane.ERROR_MESSAGE);
+                            "Exit", JOptionPane.YES_NO_OPTION);
                     if (responseOption == JOptionPane.YES_OPTION) {
                         System.exit(0);
                     }
@@ -324,6 +331,31 @@ public class RabbitGLEventListener extends Assets  {
         gl.glDisable(GL.GL_BLEND);
     }
 
+    public void DrawHammer(GL gl, int x, int y, int index, float scale) {
+        gl.glEnable(GL.GL_BLEND);
+        gl.glBindTexture(GL.GL_TEXTURE_2D, texturesHammer[index]);	// Turn Blending On
+
+        gl.glPushMatrix();
+        gl.glTranslated(x / (maxWidth / 2.0) - 0.9, y / (maxHeight / 2.0) - 0.9, 0);
+        gl.glScaled(0.1 * scale, 0.1 * scale, 1);
+        //  gl.glRotated(180, 0, 0, 1);
+        //System.out.println(x +" " + y);
+        gl.glBegin(GL.GL_QUADS);
+        // Front Face
+        gl.glTexCoord2f(0.0f, 0.0f);
+        gl.glVertex3f(-1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 0.0f);
+        gl.glVertex3f(1.0f, -1.0f, -1.0f);
+        gl.glTexCoord2f(1.0f, 1.0f);
+        gl.glVertex3f(1.0f, 1.0f, -1.0f);
+        gl.glTexCoord2f(0.0f, 1.0f);
+        gl.glVertex3f(-1.0f, 1.0f, -1.0f);
+        gl.glEnd();
+        gl.glPopMatrix();
+
+        gl.glDisable(GL.GL_BLEND);
+    }
+
 //    public void setGLCanvas(GLCanvas glc) {
 //        this.glc = glc;
 //    }
@@ -380,13 +412,5 @@ public class RabbitGLEventListener extends Assets  {
     }
 
 }
-class CordinateHoles {
 
-    int x, y;
-
-    CordinateHoles(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-}
 
