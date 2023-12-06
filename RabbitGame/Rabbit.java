@@ -21,7 +21,7 @@ public class Rabbit extends JFrame {
         glcanvas.addMouseListener(listener);
         glcanvas.addMouseMotionListener(listener);
         getContentPane().add(glcanvas, BorderLayout.CENTER);
-        animator = new FPSAnimator(8);
+        animator = new FPSAnimator(20);
         animator.add(glcanvas);
         animator.start();
 

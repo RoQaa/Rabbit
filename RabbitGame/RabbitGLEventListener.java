@@ -16,6 +16,9 @@ import javax.swing.*;
 public class RabbitGLEventListener extends Assets  {
  
  //   GLCanvas glc;
+    int delay, randomHole ;
+    CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
+
     int responseOption = 0;
     int maxWidth = 1500, maxHeight = 900, level; // cooredinates of ortho
     int x = maxWidth / 2, y = maxHeight / 2;//0-1490 , 0-890
@@ -54,6 +57,23 @@ public class RabbitGLEventListener extends Assets  {
 
     }
 
+
+    void drawGame(GL gl) {
+
+        DrawRabbitInHole(gl,EasyLevel[0].x,EasyLevel[0].y,0,10); //out
+        DrawRabbitInHole(gl,EasyLevel[1].x,EasyLevel[1].y,0,10); //out
+        DrawRabbitInHole(gl,EasyLevel[2].x,EasyLevel[2].y,0,10); //out
+
+        delay+=1;
+
+        if (delay > 10) {
+            randomHole = (int) (Math.random() * 3);
+            delay = 0;
+        }
+        animationIndex=3;
+        DrawRabbitInHole(gl,EasyLevel[randomHole].x, EasyLevel[randomHole].y , animationIndex, 10);
+    }
+
     //abdelfattah:Edit switch
     // Wafdy:this method for moving from screen to anthor screen (Navigator)
     public void switchBetweenScreens(GL gl) {
@@ -74,18 +94,13 @@ public class RabbitGLEventListener extends Assets  {
             case "Game":
                 if (level < 4) { //easy
                     DrawParentBackground(gl,3);
-
+                    drawGame(gl);
                     animationIndex++;
                     animationIndex=animationIndex%4;
 
-
-
-                    DrawRabbitInHole(gl,750,150,animationIndex,10); //out
-                    DrawRabbitInHole(gl,600,100,animationIndex,10); //out
-                    DrawRabbitInHole(gl,450,150,animationIndex,10); //out
-                    DrawRabbitInHole(gl,300,150,animationIndex,10); //out
-                    DrawRabbitInHole(gl,150,150,animationIndex,10); //out
-                    DrawRabbitInHole(gl,50,150,animationIndex,10); //out
+//                    DrawRabbitInHole(gl,300,150,animationIndex,10); //out
+//                    DrawRabbitInHole(gl,150,150,animationIndex,10); //out
+//                    DrawRabbitInHole(gl,50,150,animationIndex,10); //out
 
 
                 } else if (level < 7) {
@@ -365,3 +380,13 @@ public class RabbitGLEventListener extends Assets  {
     }
 
 }
+class CordinateHoles {
+
+    int x, y;
+
+    CordinateHoles(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
