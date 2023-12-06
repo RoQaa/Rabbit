@@ -1,6 +1,7 @@
 package RabbitGame;
 
 import Texture.TextureReader;
+import com.sun.opengl.util.j2d.TextRenderer;
 
 
 import java.awt.*;
@@ -17,11 +18,12 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets  {
- 
- //   GLCanvas glc;
+    TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 12)); // 12 --> FONT_SIZE
+
+    //   GLCanvas glc;
     int cordMouseX;
     int cordMouseY;
-
+int score;
     int delay, randomHole ;
     int animtionHammerIndex=0;
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
@@ -42,7 +44,7 @@ public class RabbitGLEventListener extends Assets  {
 
 
 
-    String[] textureNamesHammer = {"Hammer(1).png","Hammer(2).png","Hammer(3).png","Hammer(4).png","Dizzy(1).png","Dizzy(2).png","Dizzy(3).png"};
+    String[] textureNamesHammer = {"Hammer(2).png","Hammer(3).png","Hammer(4).png","Dizzy(1).png","Dizzy(2).png","Dizzy(3).png"};
     TextureReader.Texture[] textureHammer = new TextureReader.Texture[textureNamesHammer.length];
     int[] texturesHammer = new int[textureNamesHammer.length];
 
@@ -83,8 +85,15 @@ public class RabbitGLEventListener extends Assets  {
             randomHole = (int) (Math.random() * 3);
             delay = 0;
         }
+
+
         animationIndex=3;
         DrawRabbitInHole(gl,EasyLevel[randomHole].x, EasyLevel[randomHole].y , animationIndex, 10);
+        textRenderer.beginRendering(100, 100);
+        textRenderer.setColor(Color.BLACK);
+        textRenderer.draw("score: " + score, 30, 90);
+        textRenderer.setColor(Color.WHITE);
+        textRenderer.endRendering();
     }
 
     //abdelfattah:Edit switch
@@ -110,7 +119,7 @@ public class RabbitGLEventListener extends Assets  {
                     drawGame(gl);
 
 
-                DrawHammer(gl,cordMouseX-100,cordMouseY,animtionHammerIndex,9);
+                DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
 
 
 
@@ -243,6 +252,8 @@ public class RabbitGLEventListener extends Assets  {
                 }
                 break;
                 //Game page
+            //////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////
             case "Game":
                 if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
                     currentScreen = "Pause";
@@ -254,7 +265,7 @@ public class RabbitGLEventListener extends Assets  {
 
 
 
-                    animtionHammerIndex=animtionHammerIndex%4;
+                    animtionHammerIndex=animtionHammerIndex%2;
                 }
                 break;
                 //Pause page
