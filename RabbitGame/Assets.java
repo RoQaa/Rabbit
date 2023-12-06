@@ -15,6 +15,7 @@ public abstract class Assets extends Component implements GLEventListener, Mouse
             //Secret path for Images
         protected String assetsFolderName = "Images";
         protected String assetsFolderRabbit = "Rabbits";
+        protected String assetsFolderHammer = "Hammers";
 
 
 
