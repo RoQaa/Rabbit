@@ -23,6 +23,7 @@ public class RabbitGLEventListener extends Assets  {
     int cordMouseY;
 
     int delay, randomHole ;
+    int animtionHammerIndex=0;
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
 
     int responseOption = 0;
@@ -107,9 +108,9 @@ public class RabbitGLEventListener extends Assets  {
                 if (level < 4) { //easy
                     DrawParentBackground(gl,3);
                     drawGame(gl);
-                    animationIndex++;
-                    animationIndex=animationIndex%4;
-                DrawHammer(gl,cordMouseX,cordMouseY,0,9);
+
+
+                DrawHammer(gl,cordMouseX-100,cordMouseY,animtionHammerIndex,9);
 
 
 
@@ -146,11 +147,11 @@ public class RabbitGLEventListener extends Assets  {
         Component c = e.getComponent();
         double width = c.getWidth();
         double height = c.getHeight();
-        System.out.println("(width , height) = "+ "("+width+","+height+")");
-        cordMouseX = (int)((frameX/width)*600); // hebat el canves
-        cordMouseY = (int)((frameY/height)*600); //hesbat el canves
-        cordMouseY = 600-cordMouseY;
-        System.out.println("(X1 , y1) = "+ "("+cordMouseX+","+cordMouseY+")");
+//        System.out.println("(width , height) = "+ "("+width+","+height+")");
+        cordMouseX = (int)((frameX/width)*1500); // hebat el canves
+        cordMouseY = (int)((frameY/height)*900); //hesbat el canves
+        cordMouseY = 900-cordMouseY;
+        System.out.println("(cordMouseX , cordMouseY) = "+ "("+cordMouseX+","+cordMouseY+")");
 
     }
 
@@ -245,6 +246,15 @@ public class RabbitGLEventListener extends Assets  {
             case "Game":
                 if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
                     currentScreen = "Pause";
+                }
+                else{
+                    System.out.println("click success");
+
+                        animtionHammerIndex++;
+
+
+
+                    animtionHammerIndex=animtionHammerIndex%4;
                 }
                 break;
                 //Pause page
@@ -395,7 +405,7 @@ public class RabbitGLEventListener extends Assets  {
                 );
             }
         } catch (IOException e) {
-            System.out.println(e);
+            System.err.println(e);
             e.printStackTrace();
         }
 
