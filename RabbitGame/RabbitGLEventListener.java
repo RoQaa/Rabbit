@@ -2,6 +2,7 @@ package RabbitGame;
 
 import Texture.TextureReader;
 import com.sun.opengl.util.j2d.TextRenderer;
+import org.w3c.dom.ls.LSOutput;
 
 
 import java.awt.*;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 
+import javax.media.opengl.GLCanvas;
 import javax.media.opengl.glu.GLU;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -18,19 +20,20 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets  {
-    TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 12)); // 12 --> FONT_SIZE
+    TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 9)); // 9 --> FONT_SIZE
 
-    //   GLCanvas glc;
+    int Timer = 10,NumberOfHits =2 , score;
+
+    GLCanvas glc;
     int cordMouseX;
     int cordMouseY;
-int score;
+
     int delay, randomHole ;
     int animtionHammerIndex=0;
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
 
     int responseOption = 0;
     int maxWidth = 1500, maxHeight = 900, level; // cooredinates of ortho
-    int x = maxWidth / 2, y = maxHeight / 2;//0-1490 , 0-890
     int animationIndex=0;
     String currentScreen = "Game";
     String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","Display.png"};
@@ -58,6 +61,8 @@ int score;
         StoreImages(gl,textureNamesRabbit,textureRabbit,texturesRabbit,assetsFolderRabbit);
         StoreImages(gl,textureNamesHammer,textureHammer,texturesHammer,assetsFolderHammer);
 
+
+
     }
 
 
@@ -69,7 +74,6 @@ int score;
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
         switchBetweenScreens(gl);
-
     }
 
 
@@ -84,16 +88,40 @@ int score;
         if (delay > 10) {
             randomHole = (int) (Math.random() * 3);
             delay = 0;
+            if(Timer>0){
+                Timer--;
+            }else{
+                // if you lose
+                responseOption = JOptionPane.showConfirmDialog(this, "Finshed Time you lose press yes to repeat the game?",
+                        "Exit", JOptionPane.YES_NO_OPTION);
+                if(responseOption==JOptionPane.YES_OPTION){
+                    currentScreen = "Game";
+                    Timer = 10;
+                }else{
+        currentScreen = "Home";
+
+                }
+            }
+
         }
 
 
         animationIndex=3;
         DrawRabbitInHole(gl,EasyLevel[randomHole].x, EasyLevel[randomHole].y , animationIndex, 10);
-        textRenderer.beginRendering(100, 100);
-        textRenderer.setColor(Color.BLACK);
-        textRenderer.draw("score: " + score, 30, 90);
+        textRenderer.beginRendering(150, 100);
+        textRenderer.setColor(Color.white);
+        textRenderer.draw("score: " + score, 55, 90);
+
+        textRenderer.setColor(Color.red);
+        textRenderer.draw("you must hit : " + NumberOfHits+" to win", 30, 80);
+        textRenderer.setColor(Color.WHITE);
+
+        textRenderer.setColor(Color.red);
+        textRenderer.draw("Timer: " + Timer, 5, 5);
         textRenderer.setColor(Color.WHITE);
         textRenderer.endRendering();
+
+
     }
 
     //abdelfattah:Edit switch
@@ -103,7 +131,7 @@ int score;
         //draw page
         switch (currentScreen) {
             case "Home": {
-                DrawParentBackground(gl,5);
+                DrawParentBackground(gl,textures.length-1);
                 break;
             }
             case "Play":
@@ -115,12 +143,22 @@ int score;
 
             case "Game":
                 if (level < 4) { //easy
+
+
                     DrawParentBackground(gl,3);
                     drawGame(gl);
-
-
                 DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
-
+// if you win
+if(score == NumberOfHits){
+    responseOption = JOptionPane.showConfirmDialog(this, "you Win please enter yes to next level?",
+            "Exit", JOptionPane.YES_NO_OPTION);
+    if(responseOption==JOptionPane.YES_OPTION){
+        currentScreen = "Game";
+        score = 0;
+        Timer +=5;
+        NumberOfHits++;
+    }
+}
 
 
                 } else if (level < 7) {
@@ -261,11 +299,11 @@ int score;
                 else{
                     System.out.println("click success");
 
-                        animtionHammerIndex++;
-
-
-
-                    animtionHammerIndex=animtionHammerIndex%2;
+//                        animtionHammerIndex++;
+//
+//
+//
+//                    animtionHammerIndex=animtionHammerIndex%2;
                 }
                 break;
                 //Pause page
@@ -290,6 +328,24 @@ int score;
 
     }
 
+    @Override
+    public void mousePressed(MouseEvent e) {
+        if (Math.abs(cordMouseX - EasyLevel[randomHole].x) < 150 && Math.abs(cordMouseY - EasyLevel[randomHole].y) < 100) {
+            System.out.println("hit!!");
+            animtionHammerIndex =0;
+            System.out.println("animtionHammerIndex "+animtionHammerIndex);
+            score++;
+        }
+//        glc.repaint();
+    }
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+//animtionHammerIndex =0;
+//        System.out.println("animtionHammerIndex "+animtionHammerIndex);
+
+
+    }
 
 
     public void DrawParentBackground(GL gl,int index) {
@@ -389,9 +445,9 @@ int score;
         gl.glDisable(GL.GL_BLEND);
     }
 
-//    public void setGLCanvas(GLCanvas glc) {
-//        this.glc = glc;
-//    }
+    public void setGLCanvas(GLCanvas glc) {
+        this.glc = glc;
+    }
     public static void StoreImages(GL gl, String[] textureNames, TextureReader.Texture[] texture, int[] textures, String FolderPath) {
         gl.glEnable(GL.GL_TEXTURE_2D);  // Enable Texture Mapping
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
