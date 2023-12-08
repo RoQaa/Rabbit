@@ -24,7 +24,7 @@ public class RabbitGLEventListener extends Assets  {
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
 
 
-    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","backg.png"};
+    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","soundOff.png","backg.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
    static  int []textures = new int[textureNames.length];
 
@@ -138,12 +138,20 @@ public class RabbitGLEventListener extends Assets  {
         switch (currentScreen) {
             case "Home": {
                 ImagesMethods.DrawParentBackground(gl,textures.length-1);
+                ImagesMethods.DrawChild(gl,1330,770,5,1.5f);
+
                 break;
             }
             case "Play":
                 ImagesMethods.DrawParentBackground(gl,0);
                 break;
-            case "Level":
+            case "Easy":
+                ImagesMethods.DrawParentBackground(gl,2);
+                break;
+            case "Mediam":
+                ImagesMethods.DrawParentBackground(gl,2);
+                break;
+            case "Hard":
                 ImagesMethods.DrawParentBackground(gl,2);
                 break;
 
@@ -206,9 +214,11 @@ if(score == NumberOfHits){
         cordMouseX = (int) ((frameX / width) * 1500); // hebat el canves
         cordMouseY = (int) ((frameY / height) * 900); //hesbat el canves
         cordMouseY = 900 - cordMouseY;
+
         if(mouseMove) {
-        System.err.println("(cordMouseX , cordMouseY) = " + "(" + cordMouseX + "," + cordMouseY + ")");
-    }
+            System.err.println("(cordMouseX , cordMouseY) = " + "(" + cordMouseX + "," + cordMouseY + ")");
+
+        }
     }
 
 
@@ -246,22 +256,66 @@ if(score == NumberOfHits){
                 if (e.getX() > 474 && e.getX() < 560 && e.getY() > 710 && e.getY() < 790) {
                     currentScreen = "Home";
                 }
+
                 if (e.getX() > 590 && e.getX() < 915 && e.getY() > 230 && e.getY() < 350) {
-                    currentScreen = "Level";
+                    currentScreen = "Easy";
 
                 }
                 if (e.getX() > 590 && e.getX() < 915 && e.getY() > 405 && e.getY() < 520) {
-                    currentScreen = "Level";
+                    currentScreen = "Mediam";
 
                 }
                 if (e.getX() > 590 && e.getX() < 915 && e.getY() > 600 && e.getY() < 703) {
-                    currentScreen = "Level";
+                    currentScreen = "Hard";
 
                 }
 
                 break;
             //Level Selection
-            case "Level":
+            case "Easy":
+                //back button
+                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
+                    currentScreen = "Play";
+                }
+                if (e.getX() > 440 && e.getX() < 630 && e.getY() > 280 && e.getY() < 390) {
+                    currentScreen = "Game";
+                    level = 1;
+                }
+                if (e.getX() > 760 && e.getX() < 925 && e.getY() > 280 && e.getY() < 390) {
+                    currentScreen = "Game";
+                    level = 2;
+                }
+                if (e.getX() > 1025 && e.getX() < 1180 && e.getY() > 280 && e.getY() < 390) {
+                    currentScreen = "Game";
+                    level = 3;
+                }
+                if (e.getX() > 470 && e.getX() < 615 && e.getY() > 440 && e.getY() < 540) {
+                    currentScreen = "Game";
+                    level = 4;
+                }
+                if (e.getX() > 750 && e.getX() < 935 && e.getY() > 430 && e.getY() < 530) {
+                    currentScreen = "Game";
+                    level = 5;
+                }
+                if (e.getX() > 1015 && e.getX() < 1200 && e.getY() > 425 && e.getY() < 525) {
+                    currentScreen = "Game";
+                    level = 6;
+                }
+                if (e.getX() > 450 && e.getX() < 630 && e.getY() > 590 && e.getY() < 690) {
+                    currentScreen = "Game";
+                    level = 7;
+                }
+                if (e.getX() > 735 && e.getX() < 910 && e.getY() > 590 && e.getY() < 690) {
+                    currentScreen = "Game";
+                    level = 8;
+                }
+                if (e.getX() > 1020 && e.getX() < 1120 && e.getY() > 590 && e.getY() < 690) {
+                    currentScreen = "Game";
+                    level = 9;
+                }
+                break;
+
+            case "Mediam":
                 //back button
                 if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
                     currentScreen = "Play";
@@ -304,6 +358,48 @@ if(score == NumberOfHits){
                 }
                 break;
             //Game page
+            case "Hard":
+                //back button
+                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
+                    currentScreen = "Play";
+                }
+                if (e.getX() > 440 && e.getX() < 630 && e.getY() > 280 && e.getY() < 390) {
+                    currentScreen = "Game";
+                    level = 1;
+                }
+                if (e.getX() > 760 && e.getX() < 925 && e.getY() > 280 && e.getY() < 390) {
+                    currentScreen = "Game";
+                    level = 2;
+                }
+                if (e.getX() > 1025 && e.getX() < 1180 && e.getY() > 280 && e.getY() < 390) {
+                    currentScreen = "Game";
+                    level = 3;
+                }
+                if (e.getX() > 470 && e.getX() < 615 && e.getY() > 440 && e.getY() < 540) {
+                    currentScreen = "Game";
+                    level = 4;
+                }
+                if (e.getX() > 750 && e.getX() < 935 && e.getY() > 430 && e.getY() < 530) {
+                    currentScreen = "Game";
+                    level = 5;
+                }
+                if (e.getX() > 1015 && e.getX() < 1200 && e.getY() > 425 && e.getY() < 525) {
+                    currentScreen = "Game";
+                    level = 6;
+                }
+                if (e.getX() > 450 && e.getX() < 630 && e.getY() > 590 && e.getY() < 690) {
+                    currentScreen = "Game";
+                    level = 7;
+                }
+                if (e.getX() > 735 && e.getX() < 910 && e.getY() > 590 && e.getY() < 690) {
+                    currentScreen = "Game";
+                    level = 8;
+                }
+                if (e.getX() > 1020 && e.getX() < 1120 && e.getY() > 590 && e.getY() < 690) {
+                    currentScreen = "Game";
+                    level = 9;
+                }
+                break;
 
             case "Game":
                 if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
