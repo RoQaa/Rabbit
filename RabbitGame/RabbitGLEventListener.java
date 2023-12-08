@@ -12,13 +12,13 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets  {
-    boolean mouseMove=false , hitStatus=false, dizzyRabbitStatus=false;
+    boolean mouseMove=false , hitStatus=false, dizzyRabbitStatus=false , isPause = false;
     int score, cordMouseX ,cordMouseY, delay, randomHole,level,animationIndex=0, animationIndexDizzyRabbit=0
-        ,CurrentSmashedRabbit, Timer = 60,NumberOfHits =5 ,delayAnimationRabbit=0, animtionHammerIndex=0, responseOption = 0;
+        ,CurrentSmashedRabbit, Timer = 60,NumberOfHits =3 ,delayAnimationRabbit=0, animtionHammerIndex=0, responseOption = 0;
     String currentScreen = "Game";
 
 
-    TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 9)); // 9 --> FONT_SIZE
+    TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 10)); // 10 --> FONT_SIZE
 
 
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
@@ -113,16 +113,16 @@ public class RabbitGLEventListener extends Assets  {
             animationIndex=3;
             ImagesMethods.DrawRabbitInHole(gl, EasyLevel[randomHole].x, EasyLevel[randomHole].y, animationIndex, 10);
         }
-        textRenderer.beginRendering(150, 100);
-        textRenderer.setColor(Color.white);
-        textRenderer.draw("score: " + score, 55, 90);
+        textRenderer.beginRendering(300, 300);
+        textRenderer.setColor(Color.red);
+        textRenderer.draw("score: " + score, 130, 280);
 
         textRenderer.setColor(Color.red);
-        textRenderer.draw("you must hit : " + NumberOfHits+" to win", 30, 80);
+        textRenderer.draw("you must hit " + NumberOfHits+" to win", 190, 10);
         textRenderer.setColor(Color.WHITE);
 
         textRenderer.setColor(Color.red);
-        textRenderer.draw("Timer: " + Timer, 5, 5);
+        textRenderer.draw("Remaining Time: " + Timer, 5, 10);
         textRenderer.setColor(Color.WHITE);
         textRenderer.endRendering();
 
@@ -147,6 +147,7 @@ public class RabbitGLEventListener extends Assets  {
                 break;
 
             case "Game":
+//                System.out.println("Game");
                 if (level < 4) { //easy
 
 
@@ -196,7 +197,7 @@ if(score == NumberOfHits){
 
         double frameX = e.getX();
         double frameY = e.getY();
-
+        System.out.println(e.getX()+" "+e.getY());
         Component c = e.getComponent();
         double width = c.getWidth();
         double height = c.getHeight();
@@ -330,11 +331,29 @@ if(score == NumberOfHits){
                 break;
             //Pause page
             case "Pause":
-//                if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
-//                    currentScreen = "Pause";
-//                }
+                // Resume button
+                if (e.getX() > 600 && e.getX() < 790 && e.getY() > 275 && e.getY() < 340) {
+                    currentScreen = "Game";
+                    isPause = true;
+                    System.out.println("resume");
+                }
+
+                //Repaly button
+
+                if (e.getX() > 579 && e.getX() < 787 && e.getY() > 382 && e.getY() < 445) {
+                    currentScreen = "Game";
+                Timer = 60;
+                score = 0;
+                isPause= true;
+                }
+
+
+                // home button
                 if (e.getX() > 595 && e.getX() < 790 && e.getY() > 485 && e.getY() < 555) {
                     currentScreen = "Home";
+                    isPause = false;
+                    Timer = 60;
+                    score = 0;
                 }
                 if (e.getX() > 595 && e.getX() < 790 && e.getY() > 590 && e.getY() < 660) {
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
