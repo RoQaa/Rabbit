@@ -12,19 +12,20 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets  {
-    boolean mouseMove=false , hitStatus=false, dizzyRabbitStatus=false , isPause = false;
-    int score, cordMouseX ,cordMouseY, delay, randomHole,level,animationIndex=0, animationIndexDizzyRabbit=0
-        ,CurrentSmashedRabbit, Timer = 60,NumberOfHits =3 ,delayAnimationRabbit=0, animtionHammerIndex=0, responseOption = 0;
+    boolean mouseMove=false , hitStatus=false, dizzyRabbitStatus=false , isPause = false , SoundOn = true;
+    int score, cordMouseX ,cordMouseY, delay, randomHole,level,animationIndex=0, animationIndexDizzyRabbit=0,indexImageSound = 5
+        ,CurrentSmashedRabbit, Timer = 5,NumberOfHits =3 ,delayAnimationRabbit=0, animtionHammerIndex=0, responseOption = 0,lives =3;
     String currentScreen = "Home";
+    Clip clip;
 
 
     TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 10)); // 10 --> FONT_SIZE
 
 
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
+//2 كمان
 
-
-    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","soundOff.png","backg.png"};
+    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","soundOff.png","soundOn.png","backg.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
    static  int []textures = new int[textureNames.length];
 
@@ -66,7 +67,7 @@ public class RabbitGLEventListener extends Assets  {
         switchBetweenScreens(gl);
     }
 
-
+// 5 variable
     void drawGame(GL gl) {
         ImagesMethods.DrawRabbitInHole(gl,EasyLevel[0].x,EasyLevel[0].y,0,10); //out
         ImagesMethods. DrawRabbitInHole(gl,EasyLevel[1].x,EasyLevel[1].y,0,10); //out
@@ -79,19 +80,8 @@ public class RabbitGLEventListener extends Assets  {
             if(Timer>0){
                 Timer--;
             }
-         /*   else{
-                // if you lose
-                responseOption = JOptionPane.showConfirmDialog(this, "Finshed Time you lose press yes to repeat the game?",
-                        "Exit", JOptionPane.YES_NO_OPTION);
-                if(responseOption==JOptionPane.YES_OPTION){
-                    currentScreen = "Game";
-                    Timer = 10;
-                }
-                else{
-        currentScreen = "Home";
 
-                }
-            }*/
+
 
         }
 
@@ -119,6 +109,9 @@ public class RabbitGLEventListener extends Assets  {
         textRenderer.draw("score: " + score, 130, 280);
 
         textRenderer.setColor(Color.red);
+        textRenderer.draw("Lives: " + lives, 240, 280);
+
+        textRenderer.setColor(Color.red);
         textRenderer.draw("you must hit " + NumberOfHits+" to win", 190, 10);
         textRenderer.setColor(Color.WHITE);
 
@@ -138,7 +131,8 @@ public class RabbitGLEventListener extends Assets  {
         switch (currentScreen) {
             case "Home": {
                 ImagesMethods.DrawParentBackground(gl,textures.length-1);
-                ImagesMethods.DrawChild(gl,1330,770,5,1.5f);
+                System.out.println("Switch "+indexImageSound);
+                ImagesMethods.DrawChild(gl,1330,770,indexImageSound,1.5f); //sound image
 
                 break;
             }
@@ -164,17 +158,7 @@ public class RabbitGLEventListener extends Assets  {
                     drawGame(gl);
                     ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
 
-/*// if you win
-if(score == NumberOfHits){
-    responseOption = JOptionPane.showConfirmDialog(this, "you Win please enter yes to next level?",
-            "Exit", JOptionPane.YES_NO_OPTION);
-    if(responseOption==JOptionPane.YES_OPTION){
-        currentScreen = "Game";
-        score = 0;
-        Timer +=5;
-        NumberOfHits++;
-    }
-}*/
+
 
 
                 } else if (level < 7) {
@@ -230,6 +214,27 @@ if(score == NumberOfHits){
         switch (currentScreen) {
             //Home page
             case "Home":
+                if (e.getX() > 1307 && e.getX() < 1460 && e.getY() > 30 && e.getY() < 130) {
+
+
+                    SoundOn = !SoundOn;
+                    if (SoundOn){
+                        indexImageSound = 5;
+//                        ImagesMethods.DrawChild(gl,1330,770,indexImageSound,1.5f); //sound image
+
+                        clip.start();
+                        System.out.println("start  "+indexImageSound);
+                    }
+                    else {
+                        indexImageSound = 6;
+//                        ImagesMethods.DrawChild(gl,1330,770,indexImageSound,1.5f); //sound image
+
+                        System.out.println("stop  "+indexImageSound);
+
+                        clip.stop();
+                    }
+                }
+
                 if (e.getX() > 80 && e.getX() < 380 && e.getY() > 35 && e.getY() < 150) {
                     currentScreen = "Play";
                 }
@@ -421,10 +426,16 @@ if(score == NumberOfHits){
                             score++;
 
 
+                    }else{
+                        if(lives>0) {
+                            lives--;
+
+                        }
+
                     }
-
-
                     animtionHammerIndex =1;
+
+
 
 
                 }
@@ -475,14 +486,14 @@ if(score == NumberOfHits){
     }
 
 
-    public static void PlayMusic(String location) {
+    public void PlayMusic(String location) {
         try
         {
             File musicPath = new File(location);
             if(musicPath.exists())
             {
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
-                Clip clip =AudioSystem.getClip();
+                 clip =AudioSystem.getClip();
                 clip.open(audioInput);
                 clip.start();
             }
