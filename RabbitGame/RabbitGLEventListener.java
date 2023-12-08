@@ -15,7 +15,7 @@ public class RabbitGLEventListener extends Assets  {
     boolean mouseMove=false , hitStatus=false, dizzyRabbitStatus=false , isPause = false;
     int score, cordMouseX ,cordMouseY, delay, randomHole,level,animationIndex=0, animationIndexDizzyRabbit=0
         ,CurrentSmashedRabbit, Timer = 60,NumberOfHits =3 ,delayAnimationRabbit=0, animtionHammerIndex=0, responseOption = 0;
-    String currentScreen = "Game";
+    String currentScreen = "Home";
 
 
     TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 10)); // 10 --> FONT_SIZE
@@ -23,7 +23,8 @@ public class RabbitGLEventListener extends Assets  {
 
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
 
-    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","Display.png"};
+
+    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","backg.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
    static  int []textures = new int[textureNames.length];
 
@@ -219,16 +220,19 @@ if(score == NumberOfHits){
         switch (currentScreen) {
             //Home page
             case "Home":
-                if (e.getX() > 60 && e.getX() < 375 && e.getY() > 125 && e.getY() < 195) {
+                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 35 && e.getY() < 150) {
                     currentScreen = "Play";
                 }
-                if (e.getX() > 60 && e.getX() < 375 && e.getY() > 220 && e.getY() < 290) {
+                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 310 && e.getY() < 380) {
+                    currentScreen = "Score";
+                }
+                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 370 && e.getY() < 480) {
                     currentScreen = "Credits";
                 }
-                if (e.getX() > 60 && e.getX() < 375 && e.getY() > 310 && e.getY() < 380) {
+                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 540 && e.getY() < 650) {
                     currentScreen = "How to play";
                 }
-                if (e.getX() > 60 && e.getX() < 375 && e.getY() > 400 && e.getY() < 470) {
+                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 700 && e.getY() < 810) {
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
                             "Exit", JOptionPane.YES_NO_OPTION);
                     if (responseOption == JOptionPane.YES_OPTION) {
