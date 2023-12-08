@@ -8,22 +8,24 @@ package RabbitGame;/*
 import java.awt.*;
 import java.awt.event.*;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCanvas;
 import javax.media.opengl.GLEventListener;
 
 
 public abstract class Assets extends Component implements GLEventListener, MouseMotionListener, MouseListener,KeyListener {
-            //Secret path for Images
+    GLCanvas glc;
+
+    //Secret path for Images
         protected String assetsFolderName = "Images";
         protected String assetsFolderRabbit = "Rabbits";
         protected String assetsFolderHammer = "Hammers";
 
 
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
 
-
-
-
-
+    }
 
 
     @Override
@@ -77,6 +79,8 @@ public abstract class Assets extends Component implements GLEventListener, Mouse
 
     }
 
-
+    public void setGLCanvas(GLCanvas glc) {
+        this.glc = glc;
+    }
 
 }
