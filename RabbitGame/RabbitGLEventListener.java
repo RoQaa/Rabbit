@@ -13,11 +13,11 @@ import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets  {
     boolean mouseMove=false , hitStatus=false, dizzyRabbitStatus=false , isPause = false , SoundOn = true;
-    int score, cordMouseX ,cordMouseY, delay, randomHole,level,animationIndex=0, animationIndexDizzyRabbit=0,indexImageSound = 5
+    int score, cordMouseX ,cordMouseY, delay, randomHole,level,animationIndex=0, animationIndexDizzyRabbit=0,indexImageSound = 5,mode
         ,CurrentSmashedRabbit, Timer = 45,NumberOfHits =1 ,delayAnimationRabbit=0, animtionHammerIndex=0, responseOption = 0,lives =3;
     String currentScreen = "Home";
     Clip clip;
-int mode ;
+
     CordinateHoles[]DifficultyMode;
     TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 10)); // 10 --> FONT_SIZE
 
@@ -149,11 +149,16 @@ int mode ;
                 break;
 
             case "Game":
-                if (mode <9) { //easy
+                if (mode <7) { //easy
                     if(score==NumberOfHits) {
 
                         currentScreen ="win";
-                    }else{
+                    }else if(lives==0 || Timer==0){
+
+                        currentScreen = "lose";
+                    }
+
+                    else{
                         ImagesMethods.DrawParentBackground(gl,3);
                         drawGame(gl,3,40,EasyLevel);
                         ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
@@ -162,6 +167,9 @@ int mode ;
 
 
                 }
+
+
+
                 break;
 
             case "Credits":
@@ -363,6 +371,7 @@ int mode ;
 
 
                 }
+                // back button
                 if (e.getX() > 118 && e.getX() < 652 && e.getY() > 735 && e.getY() < 800) {
                     score =0;
                     Timer = 45;
@@ -378,11 +387,11 @@ int mode ;
                     score =0;
                     Timer = 45;
                     lives = 3;
-                    NumberOfHits++;
                     currentScreen = "Game";
 
-
                 }
+
+                // back to menu
                 if (e.getX() > 118 && e.getX() < 652 && e.getY() > 735 && e.getY() < 800) {
                     score =0;
                     Timer = 45;
