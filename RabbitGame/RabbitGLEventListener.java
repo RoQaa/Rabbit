@@ -149,7 +149,8 @@ public class RabbitGLEventListener extends Assets  {
                 break;
 
             case "Game":
-                if (mode <7) { //easy
+                if (level <10) {
+                    System.out.println("level "+level);//easy
                     if(score==NumberOfHits) {
 
                         currentScreen ="win";
@@ -163,30 +164,33 @@ public class RabbitGLEventListener extends Assets  {
                         drawGame(gl,3,40,EasyLevel);
                         ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
                     }
-                }else if(mode==8){
 
-                    if(score==NumberOfHits) {
+                    if(level==9){
 
-                        currentScreen ="Complete Mode";
-                    }else if(lives==0 || Timer==0){
+                        if(score==NumberOfHits) {
+                            currentScreen ="Complete Mode";
+                            System.out.println("currentScreen "+currentScreen);
 
-                        currentScreen = "lose";
+                        }else if(lives==0 || Timer==0){
+
+                            currentScreen = "lose";
+                        }
+
+
+                        else{
+                            ImagesMethods.DrawParentBackground(gl,3);
+                            drawGame(gl,3,40,EasyLevel);
+                            ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
+                        }
+
+
                     }
-
-
-                    else{
-                        ImagesMethods.DrawParentBackground(gl,3);
-                        drawGame(gl,3,40,EasyLevel);
-                        ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
-                    }
-
 
                 }
 
 
 
                 break;
-
             case "Credits":
                 ImagesMethods.DrawParentBackground(gl,10);
                 ImagesMethods.DrawChild(gl,25,800,14,0.8f);
