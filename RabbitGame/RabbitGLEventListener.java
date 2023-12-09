@@ -29,7 +29,7 @@ int mode ;
 
 
 
-    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","soundOff.png","soundOn.png","win.png","backg.png"};
+    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","soundOff.png","soundOn.png","win.png","mm.png","tt.png","1.png","2.png","3.png","4.png","back.png","backg.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
    static  int []textures = new int[textureNames.length];
 
@@ -165,10 +165,11 @@ int mode ;
                 break;
 
             case "Credits":
-                ImagesMethods.DrawParentBackground(gl,4);
+                ImagesMethods.DrawParentBackground(gl,10);
+                ImagesMethods.DrawChild(gl,25,800,14,0.8f);
                 break;
             case "How to play":
-                ImagesMethods.DrawParentBackground(gl,4);
+                ImagesMethods.DrawParentBackground(gl,13);
 
                 break;
             case "Pause":
@@ -176,8 +177,12 @@ int mode ;
 
                 break;
             case "win":
-                ImagesMethods.DrawParentBackground(gl,7);
+                ImagesMethods.DrawParentBackground(gl,11);
                 break;
+            case "lose":
+                ImagesMethods.DrawParentBackground(gl,12);
+                break;
+
 
 
         }
@@ -246,6 +251,22 @@ int mode ;
                         System.exit(0);
                     }
                 }
+                break;
+            case "Credits":
+                //back button
+                if (e.getX() > 45 && e.getX() < 150 && e.getY() > 20 && e.getY() < 80) {
+                    currentScreen = "Home";
+                }
+
+
+                break;
+            case "How to play":
+                //back button
+                if (e.getX() > 45 && e.getX() < 130 && e.getY() > 15 && e.getY() < 100) {
+                    currentScreen = "Home";
+                }
+
+
                 break;
             //Difficulty page
             case "Play":
@@ -333,7 +354,7 @@ int mode ;
                 }
                 break;
             case "win":
-                if (e.getX() > 882 && e.getX() < 1450 && e.getY() > 762 && e.getY() < 838) {
+                if (e.getX() > 831 && e.getX() < 1365 && e.getY() > 735 && e.getY() < 800) {
                     score =0;
                     Timer = 45;
                     lives = 3;
@@ -342,8 +363,36 @@ int mode ;
 
 
                 }
+                if (e.getX() > 118 && e.getX() < 652 && e.getY() > 735 && e.getY() < 800) {
+                    score =0;
+                    Timer = 45;
+                    lives = 3;
+                    currentScreen = "Home";
 
 
+                }
+
+                break;
+            case "lose":
+                if (e.getX() > 831 && e.getX() < 1365 && e.getY() > 735 && e.getY() < 800) {
+                    score =0;
+                    Timer = 45;
+                    lives = 3;
+                    NumberOfHits++;
+                    currentScreen = "Game";
+
+
+                }
+                if (e.getX() > 118 && e.getX() < 652 && e.getY() > 735 && e.getY() < 800) {
+                    score =0;
+                    Timer = 45;
+                    lives = 3;
+                    currentScreen = "Home";
+
+
+                }
+
+                break;
             case "Game":
                 if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
                     currentScreen = "Pause";
