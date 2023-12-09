@@ -14,18 +14,22 @@ import javax.swing.*;
 public class RabbitGLEventListener extends Assets  {
     boolean mouseMove=false , hitStatus=false, dizzyRabbitStatus=false , isPause = false , SoundOn = true;
     int score, cordMouseX ,cordMouseY, delay, randomHole,level,animationIndex=0, animationIndexDizzyRabbit=0,indexImageSound = 5
-        ,CurrentSmashedRabbit, Timer = 5,NumberOfHits =3 ,delayAnimationRabbit=0, animtionHammerIndex=0, responseOption = 0,lives =3;
+        ,CurrentSmashedRabbit, Timer = 45,NumberOfHits =1 ,delayAnimationRabbit=0, animtionHammerIndex=0, responseOption = 0,lives =3;
     String currentScreen = "Home";
     Clip clip;
-
-
+int mode ;
+    CordinateHoles[]DifficultyMode;
     TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 10)); // 10 --> FONT_SIZE
 
-
     CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
-//2 كمان
+    CordinateHoles[] MediumLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100), new CordinateHoles(450, 100),new CordinateHoles(950, 200),new CordinateHoles(950, 100)};
+    CordinateHoles[] HardLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100),
+                                new CordinateHoles(450, 100),new CordinateHoles(950, 200),new CordinateHoles(950, 100),
+                                new CordinateHoles(300, 150),new CordinateHoles(1100, 150) };
 
-    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","soundOff.png","soundOn.png","backg.png"};
+
+
+    static String[] textureNames = {"Diffuclty.png","Pause.png","Level.png","ssLevel.png","llLevel.png","soundOff.png","soundOn.png","win.png","backg.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
    static  int []textures = new int[textureNames.length];
 
@@ -46,7 +50,6 @@ public class RabbitGLEventListener extends Assets  {
     public void init(GLAutoDrawable gld) {
        GL  gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        //Map images to Memory
         ImagesMethods.StoreImages(gl,textureNames,texture,textures,assetsFolderName);
         ImagesMethods.StoreImages(gl,textureNamesRabbit,textureRabbit,texturesRabbit,assetsFolderRabbit);
         ImagesMethods.StoreImages(gl,textureNamesDizzyRabbit,textureDizzyRabbit,texturesDizzyRabbit,assetsFolderRabbit);
@@ -54,10 +57,7 @@ public class RabbitGLEventListener extends Assets  {
 
 //        String filepath ="Sound/Run-Amok(chosic.com).wav";
 //        PlayMusic(filepath);
-//        // JOptionPane.showMessageDialog(null,"press button to stop playing");
     }
-
-
 
     @Override
     public void display(GLAutoDrawable glad) {
@@ -66,62 +66,64 @@ public class RabbitGLEventListener extends Assets  {
         gl.glLoadIdentity();
         switchBetweenScreens(gl);
     }
+   public  void drawGame(GL gl,int NumOfRandomHole,int delaySpeed,CordinateHoles[]Difficulty) {
 
-// 5 variable
-    void drawGame(GL gl) {
-        ImagesMethods.DrawRabbitInHole(gl,EasyLevel[0].x,EasyLevel[0].y,0,10); //out
-        ImagesMethods. DrawRabbitInHole(gl,EasyLevel[1].x,EasyLevel[1].y,0,10); //out
-        ImagesMethods.DrawRabbitInHole(gl,EasyLevel[2].x,EasyLevel[2].y,0,10); //out
-        delay+=1;
-
-        if (delay > 5) {
-            randomHole = (int) (Math.random() * 3);
-            delay = 0;
-            if(Timer>0){
-                Timer--;
-            }
+    DifficultyMode = Difficulty;
 
 
+    for (int i = 0; i < DifficultyMode.length; i++) {
+        ImagesMethods.DrawRabbitInHole(gl, DifficultyMode[i].x, DifficultyMode[i].y, 0, 10); //out
+    }
+    delay += 1;
 
+    if (delay > delaySpeed) {
+        randomHole = (int) (Math.random() * NumOfRandomHole);
+
+        delay = 0;
+        if (Timer > 0) {
+            Timer--;
         }
-
-        if(hitStatus){
-            dizzyRabbitStatus=true;
-            animationIndexDizzyRabbit++;
-            animationIndexDizzyRabbit=animationIndexDizzyRabbit%3;
-
-            ImagesMethods.DrawDizzyRabbit(gl, EasyLevel[CurrentSmashedRabbit].x, EasyLevel[CurrentSmashedRabbit].y, animationIndexDizzyRabbit, 10);
-
-            delayAnimationRabbit+=1;
-
-            if(delayAnimationRabbit>5) {
-                delayAnimationRabbit=0;
-                hitStatus = false;
-                dizzyRabbitStatus=false;
-            }
-
-        }else {
-            animationIndex=3;
-            ImagesMethods.DrawRabbitInHole(gl, EasyLevel[randomHole].x, EasyLevel[randomHole].y, animationIndex, 10);
-        }
-        textRenderer.beginRendering(300, 300);
-        textRenderer.setColor(Color.red);
-        textRenderer.draw("score: " + score, 130, 280);
-
-        textRenderer.setColor(Color.red);
-        textRenderer.draw("Lives: " + lives, 240, 280);
-
-        textRenderer.setColor(Color.red);
-        textRenderer.draw("you must hit " + NumberOfHits+" to win", 190, 10);
-        textRenderer.setColor(Color.WHITE);
-
-        textRenderer.setColor(Color.red);
-        textRenderer.draw("Remaining Time: " + Timer, 5, 10);
-        textRenderer.setColor(Color.WHITE);
-        textRenderer.endRendering();
-
 
     }
+
+
+    if (hitStatus) {
+        dizzyRabbitStatus = true;
+        animationIndexDizzyRabbit++;
+        animationIndexDizzyRabbit = animationIndexDizzyRabbit % 3;
+
+        ImagesMethods.DrawDizzyRabbit(gl, DifficultyMode[CurrentSmashedRabbit].x, DifficultyMode[CurrentSmashedRabbit].y, animationIndexDizzyRabbit, 10);
+
+        delayAnimationRabbit += 1;
+
+        if (delayAnimationRabbit > delaySpeed) {
+            delayAnimationRabbit = 0;
+            hitStatus = false;
+            dizzyRabbitStatus = false;
+        }
+
+    } else {
+        animationIndex = 3;
+        //
+        ImagesMethods.DrawRabbitInHole(gl, DifficultyMode[randomHole].x, DifficultyMode[randomHole].y, animationIndex, 10);
+    }
+    textRenderer.beginRendering(300, 300);
+    textRenderer.setColor(Color.red);
+    textRenderer.draw("score: " + score, 130, 280);
+
+    textRenderer.setColor(Color.red);
+    textRenderer.draw("Lives: " + lives, 240, 280);
+
+    textRenderer.setColor(Color.red);
+    textRenderer.draw("you must hit " + NumberOfHits + " to win", 190, 10);
+    textRenderer.setColor(Color.WHITE);
+
+    textRenderer.setColor(Color.red);
+    textRenderer.draw("Remaining Time: " + Timer, 5, 10);
+    textRenderer.setColor(Color.WHITE);
+    textRenderer.endRendering();
+
+}
 
     //abdelfattah:Edit switch
     // Wafdy:this method for moving from screen to anthor screen (Navigator)
@@ -131,40 +133,34 @@ public class RabbitGLEventListener extends Assets  {
         switch (currentScreen) {
             case "Home": {
                 ImagesMethods.DrawParentBackground(gl,textures.length-1);
-                System.out.println("Switch "+indexImageSound);
                 ImagesMethods.DrawChild(gl,1330,770,indexImageSound,1.5f); //sound image
-
                 break;
             }
             case "Play":
                 ImagesMethods.DrawParentBackground(gl,0);
                 break;
             case "Easy":
-                ImagesMethods.DrawParentBackground(gl,2);
-                break;
-            case "Mediam":
-                ImagesMethods.DrawParentBackground(gl,2);
-                break;
+            case "Medium":
             case "Hard":
-                ImagesMethods.DrawParentBackground(gl,2);
+
+
+                    ImagesMethods.DrawParentBackground(gl, 2);
+
                 break;
 
             case "Game":
-//                System.out.println("Game");
-                if (level < 4) { //easy
+                if (mode <9) { //easy
+                    if(score==NumberOfHits) {
+
+                        currentScreen ="win";
+                    }else{
+                        ImagesMethods.DrawParentBackground(gl,3);
+                        drawGame(gl,3,40,EasyLevel);
+                        ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
+                    }
 
 
-                    ImagesMethods.DrawParentBackground(gl,3);
-                    drawGame(gl);
-                    ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
 
-
-
-
-                } else if (level < 7) {
-                    ImagesMethods.DrawParentBackground(gl,3);
-                } else  {
-                    ImagesMethods.DrawParentBackground(gl,4);
                 }
                 break;
 
@@ -179,8 +175,13 @@ public class RabbitGLEventListener extends Assets  {
                 ImagesMethods.DrawParentBackground(gl,1);
 
                 break;
+            case "win":
+                ImagesMethods.DrawParentBackground(gl,7);
+                break;
+
 
         }
+
 
     }
 
@@ -206,7 +207,6 @@ public class RabbitGLEventListener extends Assets  {
     }
 
 
-
     @Override
     public void mousePressed(MouseEvent e) {
         //abdelfattah
@@ -214,23 +214,15 @@ public class RabbitGLEventListener extends Assets  {
         switch (currentScreen) {
             //Home page
             case "Home":
+                // sound
                 if (e.getX() > 1307 && e.getX() < 1460 && e.getY() > 30 && e.getY() < 130) {
-
-
                     SoundOn = !SoundOn;
                     if (SoundOn){
                         indexImageSound = 5;
-//                        ImagesMethods.DrawChild(gl,1330,770,indexImageSound,1.5f); //sound image
-
                         clip.start();
-                        System.out.println("start  "+indexImageSound);
                     }
                     else {
                         indexImageSound = 6;
-//                        ImagesMethods.DrawChild(gl,1330,770,indexImageSound,1.5f); //sound image
-
-                        System.out.println("stop  "+indexImageSound);
-
                         clip.stop();
                     }
                 }
@@ -264,105 +256,24 @@ public class RabbitGLEventListener extends Assets  {
 
                 if (e.getX() > 590 && e.getX() < 915 && e.getY() > 230 && e.getY() < 350) {
                     currentScreen = "Easy";
+                    mode = 0;
 
                 }
                 if (e.getX() > 590 && e.getX() < 915 && e.getY() > 405 && e.getY() < 520) {
-                    currentScreen = "Mediam";
-
+                    currentScreen = "Medium";
+                        mode = 9;
                 }
                 if (e.getX() > 590 && e.getX() < 915 && e.getY() > 600 && e.getY() < 703) {
                     currentScreen = "Hard";
+                    mode = 18;
 
                 }
+
 
                 break;
             //Level Selection
             case "Easy":
-                //back button
-                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
-                    currentScreen = "Play";
-                }
-                if (e.getX() > 440 && e.getX() < 630 && e.getY() > 280 && e.getY() < 390) {
-                    currentScreen = "Game";
-                    level = 1;
-                }
-                if (e.getX() > 760 && e.getX() < 925 && e.getY() > 280 && e.getY() < 390) {
-                    currentScreen = "Game";
-                    level = 2;
-                }
-                if (e.getX() > 1025 && e.getX() < 1180 && e.getY() > 280 && e.getY() < 390) {
-                    currentScreen = "Game";
-                    level = 3;
-                }
-                if (e.getX() > 470 && e.getX() < 615 && e.getY() > 440 && e.getY() < 540) {
-                    currentScreen = "Game";
-                    level = 4;
-                }
-                if (e.getX() > 750 && e.getX() < 935 && e.getY() > 430 && e.getY() < 530) {
-                    currentScreen = "Game";
-                    level = 5;
-                }
-                if (e.getX() > 1015 && e.getX() < 1200 && e.getY() > 425 && e.getY() < 525) {
-                    currentScreen = "Game";
-                    level = 6;
-                }
-                if (e.getX() > 450 && e.getX() < 630 && e.getY() > 590 && e.getY() < 690) {
-                    currentScreen = "Game";
-                    level = 7;
-                }
-                if (e.getX() > 735 && e.getX() < 910 && e.getY() > 590 && e.getY() < 690) {
-                    currentScreen = "Game";
-                    level = 8;
-                }
-                if (e.getX() > 1020 && e.getX() < 1120 && e.getY() > 590 && e.getY() < 690) {
-                    currentScreen = "Game";
-                    level = 9;
-                }
-                break;
-
-            case "Mediam":
-                //back button
-                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
-                    currentScreen = "Play";
-                }
-                if (e.getX() > 440 && e.getX() < 630 && e.getY() > 280 && e.getY() < 390) {
-                    currentScreen = "Game";
-                    level = 1;
-                }
-                if (e.getX() > 760 && e.getX() < 925 && e.getY() > 280 && e.getY() < 390) {
-                    currentScreen = "Game";
-                    level = 2;
-                }
-                if (e.getX() > 1025 && e.getX() < 1180 && e.getY() > 280 && e.getY() < 390) {
-                    currentScreen = "Game";
-                    level = 3;
-                }
-                if (e.getX() > 470 && e.getX() < 615 && e.getY() > 440 && e.getY() < 540) {
-                    currentScreen = "Game";
-                    level = 4;
-                }
-                if (e.getX() > 750 && e.getX() < 935 && e.getY() > 430 && e.getY() < 530) {
-                    currentScreen = "Game";
-                    level = 5;
-                }
-                if (e.getX() > 1015 && e.getX() < 1200 && e.getY() > 425 && e.getY() < 525) {
-                    currentScreen = "Game";
-                    level = 6;
-                }
-                if (e.getX() > 450 && e.getX() < 630 && e.getY() > 590 && e.getY() < 690) {
-                    currentScreen = "Game";
-                    level = 7;
-                }
-                if (e.getX() > 735 && e.getX() < 910 && e.getY() > 590 && e.getY() < 690) {
-                    currentScreen = "Game";
-                    level = 8;
-                }
-                if (e.getX() > 1020 && e.getX() < 1120 && e.getY() > 590 && e.getY() < 690) {
-                    currentScreen = "Game";
-                    level = 9;
-                }
-                break;
-            //Game page
+            case "Medium":
             case "Hard":
                 //back button
                 if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
@@ -370,41 +281,68 @@ public class RabbitGLEventListener extends Assets  {
                 }
                 if (e.getX() > 440 && e.getX() < 630 && e.getY() > 280 && e.getY() < 390) {
                     currentScreen = "Game";
-                    level = 1;
+                    level = 1+mode;
+                    NumberOfHits = 3;
                 }
                 if (e.getX() > 760 && e.getX() < 925 && e.getY() > 280 && e.getY() < 390) {
                     currentScreen = "Game";
-                    level = 2;
+                    level = 2+mode;
+                    NumberOfHits = 4;
                 }
                 if (e.getX() > 1025 && e.getX() < 1180 && e.getY() > 280 && e.getY() < 390) {
                     currentScreen = "Game";
-                    level = 3;
+                    level = 3+mode;
+                    NumberOfHits = 5;
+
                 }
                 if (e.getX() > 470 && e.getX() < 615 && e.getY() > 440 && e.getY() < 540) {
                     currentScreen = "Game";
-                    level = 4;
+                    level = 4+mode;
+                    NumberOfHits = 6;
+
                 }
                 if (e.getX() > 750 && e.getX() < 935 && e.getY() > 430 && e.getY() < 530) {
                     currentScreen = "Game";
-                    level = 5;
+                    level = 5+mode;
+                    NumberOfHits = 7;
+
                 }
                 if (e.getX() > 1015 && e.getX() < 1200 && e.getY() > 425 && e.getY() < 525) {
                     currentScreen = "Game";
-                    level = 6;
+                    level = 6+mode;
+                    NumberOfHits = 8;
+
                 }
                 if (e.getX() > 450 && e.getX() < 630 && e.getY() > 590 && e.getY() < 690) {
                     currentScreen = "Game";
-                    level = 7;
+                    level = 7+mode;
+                    NumberOfHits = 9;
+
                 }
                 if (e.getX() > 735 && e.getX() < 910 && e.getY() > 590 && e.getY() < 690) {
                     currentScreen = "Game";
-                    level = 8;
+                    level = 8+mode;
+                    NumberOfHits = 10;
+
                 }
                 if (e.getX() > 1020 && e.getX() < 1120 && e.getY() > 590 && e.getY() < 690) {
                     currentScreen = "Game";
-                    level = 9;
+                    level = 9+mode;
+                    NumberOfHits = 11;
+
                 }
                 break;
+            case "win":
+                if (e.getX() > 882 && e.getX() < 1450 && e.getY() > 762 && e.getY() < 838) {
+                    score =0;
+                    Timer = 45;
+                    lives = 3;
+                    NumberOfHits++;
+                    currentScreen = "Game";
+
+
+                }
+
 
             case "Game":
                 if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
@@ -417,26 +355,20 @@ public class RabbitGLEventListener extends Assets  {
 
                     //Rabbits Coordinates
 
-
                     //Checkkk if anime
-                    if(cordMouseX>=EasyLevel[randomHole].x+12&&cordMouseX<=EasyLevel[randomHole].x+140&&cordMouseY>=EasyLevel[randomHole].y+90&&cordMouseY<=EasyLevel[randomHole].y+155){
-                        CurrentSmashedRabbit=randomHole;
-                        hitStatus=true;
-                       if(!dizzyRabbitStatus)
-                            score++;
 
+                        if (cordMouseX >= DifficultyMode[randomHole].x + 12 && cordMouseX <= DifficultyMode[randomHole].x + 140 && cordMouseY >= DifficultyMode[randomHole].y + 90 && cordMouseY <= DifficultyMode[randomHole].y + 155) {
+                            CurrentSmashedRabbit = randomHole;
+                            hitStatus = true;
+                            if (!dizzyRabbitStatus)
+                                score++;
 
-                    }else{
-                        if(lives>0) {
-                            lives--;
-
+                        } else {
+                            if (lives > 0) {
+                                lives--;
+                            }
                         }
-
-                    }
-                    animtionHammerIndex =1;
-
-
-
+                        animtionHammerIndex = 1;
 
                 }
                 break;
@@ -446,7 +378,6 @@ public class RabbitGLEventListener extends Assets  {
                 if (e.getX() > 600 && e.getX() < 790 && e.getY() > 275 && e.getY() < 340) {
                     currentScreen = "Game";
                     isPause = true;
-                    System.out.println("resume");
                 }
 
                 //Repaly button
@@ -465,6 +396,7 @@ public class RabbitGLEventListener extends Assets  {
                     isPause = false;
                     Timer = 60;
                     score = 0;
+                    mode = 0;
                 }
                 if (e.getX() > 595 && e.getX() < 790 && e.getY() > 590 && e.getY() < 660) {
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
@@ -476,15 +408,12 @@ public class RabbitGLEventListener extends Assets  {
                 break;
 
         }
-//glc.repaint();
 
     }
     @Override
     public void mouseReleased(MouseEvent e) {
-
         animtionHammerIndex =0;
     }
-
 
     public void PlayMusic(String location) {
         try
@@ -509,5 +438,3 @@ public class RabbitGLEventListener extends Assets  {
     }
 
 }
-
-
