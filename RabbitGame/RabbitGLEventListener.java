@@ -163,7 +163,22 @@ public class RabbitGLEventListener extends Assets  {
                         drawGame(gl,3,40,EasyLevel);
                         ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
                     }
+                }else if(mode==8){
 
+                    if(score==NumberOfHits) {
+
+                        currentScreen ="Complete Mode";
+                    }else if(lives==0 || Timer==0){
+
+                        currentScreen = "lose";
+                    }
+
+
+                    else{
+                        ImagesMethods.DrawParentBackground(gl,3);
+                        drawGame(gl,3,40,EasyLevel);
+                        ImagesMethods.DrawHammer(gl,cordMouseX+60,cordMouseY,animtionHammerIndex,9);
+                    }
 
 
                 }
@@ -186,6 +201,9 @@ public class RabbitGLEventListener extends Assets  {
                 break;
             case "win":
                 ImagesMethods.DrawParentBackground(gl,11);
+                break;
+            case "Complete Mode":
+                ImagesMethods.DrawParentBackground(gl,8);
                 break;
             case "lose":
                 ImagesMethods.DrawParentBackground(gl,12);
@@ -360,6 +378,27 @@ public class RabbitGLEventListener extends Assets  {
                     NumberOfHits = 11;
 
                 }
+                break;
+            case "Complete Mode":
+                if (e.getX() > 831 && e.getX() < 1365 && e.getY() > 735 && e.getY() < 800) {
+                    score =0;
+                    Timer = 45;
+                    lives = 3;
+                    NumberOfHits++;
+                    currentScreen = "Play";
+
+
+                }
+                // back button
+                if (e.getX() > 118 && e.getX() < 652 && e.getY() > 735 && e.getY() < 800) {
+                    score =0;
+                    Timer = 45;
+                    lives = 3;
+                    currentScreen = "Home";
+
+
+                }
+
                 break;
             case "win":
                 if (e.getX() > 831 && e.getX() < 1365 && e.getY() > 735 && e.getY() < 800) {
