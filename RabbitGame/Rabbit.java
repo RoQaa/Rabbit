@@ -27,7 +27,6 @@ public class Rabbit extends JFrame {
         animator = new FPSAnimator(30);
         animator.add(glcanvas);
         animator.start();
-
         setTitle("Rabbit");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1500, 900);

@@ -192,6 +192,7 @@ public class RabbitGLEventListener extends Assets {
         cordMouseX = (int) ((frameX / width) * 1500); // hebat el canves
         cordMouseY = (int) ((frameY / height) * 900); //hesbat el canves
         cordMouseY = 900 - cordMouseY;
+        System.err.println(  "(" + cordMouseX + "," + cordMouseY + ")");
 
         if (mouseMove) {
             System.err.println("(cordMouseX , cordMouseY) = " + "(" + cordMouseX + "," + cordMouseY + ")");
@@ -207,7 +208,7 @@ public class RabbitGLEventListener extends Assets {
             //Home page
             case "Home":
                 // sound
-                if (e.getX() > 1307 && e.getX() < 1460 && e.getY() > 30 && e.getY() < 130) {
+                if (cordMouseX> 1320 && cordMouseX < 1480 &&cordMouseY > 760 && cordMouseY < 870) {
                     SoundOn = !SoundOn;
                     if (SoundOn) {
                         indexImageSound = 5;
@@ -218,23 +219,23 @@ public class RabbitGLEventListener extends Assets {
                     }
                 }
 
-                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 35 && e.getY() < 150) {
+                if (cordMouseX> 75 && cordMouseX < 385 &&cordMouseY > 745 && cordMouseY < 865) {
                     currentScreen = "Play";
                     soundObject("Sound/mouse-click-153941.wav");
                 }
-                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 310 && e.getY() < 380) {
+                if (cordMouseX> 75 && cordMouseX < 385 &&cordMouseY > 568 && cordMouseY < 690) {
                     currentScreen = "Score";
                     soundObject("Sound/mouse-click-153941.wav");
                 }
-                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 370 && e.getY() < 480) {
+                if (cordMouseX> 75 && cordMouseX < 385 &&cordMouseY > 400 && cordMouseY < 518) {
                     currentScreen = "Credits";
                     soundObject("Sound/mouse-click-153941.wav");
                 }
-                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 540 && e.getY() < 650) {
+                if (cordMouseX> 75 && cordMouseX < 385 &&cordMouseY > 220 && cordMouseY < 340) {
                     currentScreen = "How to play";
                     soundObject("Sound/mouse-click-153941.wav");
                 }
-                if (e.getX() > 80 && e.getX() < 380 && e.getY() > 700 && e.getY() < 810) {
+                if (cordMouseX> 75 && cordMouseX < 385 &&cordMouseY > 50 && cordMouseY < 150) {
                     soundObject("Sound/mouse-click-153941.wav");
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
                             "Exit", JOptionPane.YES_NO_OPTION);
@@ -245,7 +246,7 @@ public class RabbitGLEventListener extends Assets {
                 break;
             case "Credits":
                 //back button
-                if (e.getX() > 45 && e.getX() < 150 && e.getY() > 20 && e.getY() < 80) {
+                if (cordMouseX> 45 && cordMouseX < 150 &&cordMouseY > 820 && cordMouseY < 880) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Home";
                 }
@@ -253,7 +254,7 @@ public class RabbitGLEventListener extends Assets {
                 break;
             case "How to play":
                 //back button
-                if (e.getX() > 45 && e.getX() < 130 && e.getY() > 15 && e.getY() < 100) {
+                if (cordMouseX > 45 && cordMouseX < 130 && cordMouseY > 810 && cordMouseY < 885) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Home";
                 }
@@ -262,23 +263,23 @@ public class RabbitGLEventListener extends Assets {
             //Difficulty page
             case "Play":
                 //back button
-                if (e.getX() > 474 && e.getX() < 560 && e.getY() > 710 && e.getY() < 790) {
+                if (cordMouseX> 480 && cordMouseX < 565 &&cordMouseY > 75 && cordMouseY < 155) {
                     soundObject("Sound/mouse-click-153941.wav");
 
                     currentScreen = "Home";
                 }
 
-                if (e.getX() > 590 && e.getX() < 915 && e.getY() > 230 && e.getY() < 350) {
+                if (cordMouseX> 590 && cordMouseX < 925 &&cordMouseY > 540 && cordMouseY < 660) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Easy";
                     mode = 0;
                 }
-                if (e.getX() > 590 && e.getX() < 915 && e.getY() > 405 && e.getY() < 520) {
+                if (cordMouseX> 590 && cordMouseX < 925 &&cordMouseY > 360 && cordMouseY < 480) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Medium";
                     mode = 9;
                 }
-                if (e.getX() > 590 && e.getX() < 915 && e.getY() > 600 && e.getY() < 703) {
+                if (cordMouseX> 590 && cordMouseX < 925 &&cordMouseY > 160 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Hard";
                     mode = 18;
@@ -290,51 +291,51 @@ public class RabbitGLEventListener extends Assets {
             case "Medium":
             case "Hard":
                 //back button
-                if (e.getX() > 25 && e.getX() < 150 && e.getY() > 15 && e.getY() < 95) {
+                if (cordMouseX> 25 && cordMouseX < 150 &&cordMouseY > 800 && cordMouseY < 885) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Play";
                 }
-                if (e.getX() > 440 && e.getX() < 630 && e.getY() > 280 && e.getY() < 390) {
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 500 && cordMouseY < 600) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 1 + mode;
                 }
-                if (e.getX() > 760 && e.getX() < 925 && e.getY() > 280 && e.getY() < 390) {
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 500 && cordMouseY < 600) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 2 + mode;
                 }
-                if (e.getX() > 1025 && e.getX() < 1180 && e.getY() > 280 && e.getY() < 390) {
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 500 && cordMouseY < 600) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 3 + mode;
                 }
-                if (e.getX() > 470 && e.getX() < 615 && e.getY() > 440 && e.getY() < 540) {
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 335 && cordMouseY < 435) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 4 + mode;
                 }
-                if (e.getX() > 750 && e.getX() < 935 && e.getY() > 430 && e.getY() < 530) {
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 345 && cordMouseY < 445) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 5 + mode;
                 }
-                if (e.getX() > 1015 && e.getX() < 1200 && e.getY() > 425 && e.getY() < 525) {
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 350 && cordMouseY < 450) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 6 + mode;
                 }
-                if (e.getX() > 450 && e.getX() < 630 && e.getY() > 590 && e.getY() < 690) {
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 180 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 7 + mode;
                 }
-                if (e.getX() > 735 && e.getX() < 910 && e.getY() > 590 && e.getY() < 690) {
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 180 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 8 + mode;
                 }
-                if (e.getX() > 1020 && e.getX() < 1120 && e.getY() > 590 && e.getY() < 690) {
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 180 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 9 + mode;
@@ -342,7 +343,7 @@ public class RabbitGLEventListener extends Assets {
                 }
                 break;
             case "Complete Mode":
-                if (e.getX() > 831 && e.getX() < 1365 && e.getY() > 735 && e.getY() < 800) {
+                if (cordMouseX> 840 && cordMouseX < 1371 &&cordMouseY > 66 && cordMouseY < 130) {
                     soundObject("Sound/mouse-click-153941.wav");
                     score = 0;
                     Timer = 45;
@@ -351,7 +352,7 @@ public class RabbitGLEventListener extends Assets {
                     currentScreen = "Play";
                 }
                 // back button
-                if (e.getX() > 118 && e.getX() < 652 && e.getY() > 735 && e.getY() < 800) {
+                if (cordMouseX> 125 && cordMouseX < 650 &&cordMouseY > 66 && cordMouseY < 130) {
                     soundObject("Sound/mouse-click-153941.wav");
                     score = 0;
                     Timer = 45;
@@ -366,14 +367,14 @@ public class RabbitGLEventListener extends Assets {
                 score = 0;
                 Timer = 45;
                 lives = 3;
-                if (e.getX() > 831 && e.getX() < 1365 && e.getY() > 735 && e.getY() < 800) {
+                if (cordMouseX> 845 && cordMouseX < 1370 &&cordMouseY > 68 && cordMouseY < 128) {
                     soundObject("Sound/mouse-click-153941.wav");
                     level++;
                     currentScreen = "Game";
 
                 }
                 // back button
-                if (e.getX() > 118 && e.getX() < 652 && e.getY() > 735 && e.getY() < 800) {
+                if (cordMouseX> 120 && cordMouseX < 645 &&cordMouseY > 69 && cordMouseY < 128) {
                     soundObject("Sound/mouse-click-153941.wav");
                     level = 0;
                     currentScreen = "Home";
@@ -385,12 +386,12 @@ public class RabbitGLEventListener extends Assets {
                 score = 0;
                 Timer = 45;
                 lives = 3;
-                if (e.getX() > 831 && e.getX() < 1365 && e.getY() > 735 && e.getY() < 800) {
+                if (cordMouseX> 845 && cordMouseX < 1371 &&cordMouseY > 67 && cordMouseY < 131) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                 }
                 // back to menu
-                if (e.getX() > 118 && e.getX() < 652 && e.getY() > 735 && e.getY() < 800) {
+                if (cordMouseX> 122 && cordMouseX < 653 &&cordMouseY > 67 && cordMouseY < 131) {
                     soundObject("Sound/mouse-click-153941.wav");
                     level = 0;
                     currentScreen = "Home";
@@ -398,7 +399,7 @@ public class RabbitGLEventListener extends Assets {
 
                 break;
             case "Game":
-                if (e.getX() > 30 && e.getX() < 130 && e.getY() > 20 && e.getY() < 120) {
+                if (cordMouseX> 15 && cordMouseX < 115 &&cordMouseY > 780 && cordMouseY < 880) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Pause";
                 } else {
@@ -427,14 +428,14 @@ public class RabbitGLEventListener extends Assets {
             //Pause page
             case "Pause":
                 // Resume button
-                if (e.getX() > 600 && e.getX() < 790 && e.getY() > 275 && e.getY() < 340) {
+                if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 540 && cordMouseY < 615) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     isPause = true;
                 }
 
                 //Repaly button
-                if (e.getX() > 579 && e.getX() < 787 && e.getY() > 382 && e.getY() < 445) {
+                if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 430 && cordMouseY < 500) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     Timer = 60;
@@ -443,7 +444,7 @@ public class RabbitGLEventListener extends Assets {
                 }
 
                 // home button
-                if (e.getX() > 595 && e.getX() < 790 && e.getY() > 485 && e.getY() < 555) {
+                if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 320 && cordMouseY < 400) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Home";
                     isPause = false;
@@ -451,7 +452,7 @@ public class RabbitGLEventListener extends Assets {
                     score = 0;
                     mode = 0;
                 }
-                if (e.getX() > 595 && e.getX() < 790 && e.getY() > 590 && e.getY() < 660) {
+                if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 110 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
                             "Exit", JOptionPane.YES_NO_OPTION);
