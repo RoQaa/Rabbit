@@ -14,17 +14,19 @@ import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets {
 
-    boolean mouseMove, hitStatus, dizzyRabbitStatus, isPause, SoundOn = true, soundButton = true;
-    int score, cordMouseX, cordMouseY, delay, randomHole, level, animationIndex = 0, animationIndexDizzyRabbit = 0, indexImageSound = 5, mode, CurrentSmashedRabbit, Timer = 45, NumberOfHits = 1, delayAnimationRabbit = 0, animtionHammerIndex = 0, responseOption = 0, lives = 3;
+    boolean  hitStatus, dizzyRabbitStatus, isPause, SoundOn = true, soundButton = true;
+    int score, cordMouseX, cordMouseY, delay, randomHole, level, animationIndex = 0, animationIndexDizzyRabbit = 0, indexImageSound = 5, mode, CurrentSmashedRabbit, Timer = 45, NumberOfHits = 3 , delayAnimationRabbit = 0, animtionHammerIndex = 0, responseOption = 0, lives = 3;
     String currentScreen = "Home";
     Clip clip, clip2;
+    int levels;
+    int TotalScore;
 
     CordinateHoles[] DifficultyMode;
     TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 10)); // 10 --> FONT_SIZE
 
-    CordinateHoles[] EasyLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
-    CordinateHoles[] MediumLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100), new CordinateHoles(450, 100), new CordinateHoles(950, 200), new CordinateHoles(950, 100)};
-    CordinateHoles[] HardLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100),
+    CordinateHoles[] FirstThreeLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
+    CordinateHoles[] SecondThreeLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100), new CordinateHoles(450, 100), new CordinateHoles(950, 200), new CordinateHoles(950, 100)};
+    CordinateHoles[] thirdThreeLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100),
             new CordinateHoles(450, 100), new CordinateHoles(950, 200), new CordinateHoles(950, 100),
             new CordinateHoles(300, 150), new CordinateHoles(1100, 150)};
 
@@ -68,8 +70,8 @@ public class RabbitGLEventListener extends Assets {
     }
 
     void drawGame(GL gl, int delaySpeed) {
-        for (int i = 0; i < DifficultyMode.length; i++) {
-            ImagesMethods.DrawRabbitInHole(gl, DifficultyMode[i].x, DifficultyMode[i].y, 0, 10); //out
+        for (CordinateHoles cordinateHoles : DifficultyMode) {
+            ImagesMethods.DrawRabbitInHole(gl, cordinateHoles.x, cordinateHoles.y, 0, 10); //out
         }
         if (randomHole > DifficultyMode.length) {
             randomHole = (int) (Math.random() * DifficultyMode.length);
@@ -115,6 +117,36 @@ public class RabbitGLEventListener extends Assets {
         textRenderer.draw("Remaining Time: " + Timer, 5, 10);
         textRenderer.setColor(Color.WHITE);
         textRenderer.endRendering();
+        if(mode==0){
+            textRenderer.beginRendering(300, 300);
+            textRenderer.setColor(Color.red);
+            textRenderer.draw("Mode: Easy" , 40, 280);
+            textRenderer.draw("Level: " +levels, 130, 10);
+
+            textRenderer.setColor(Color.WHITE);
+            textRenderer.endRendering();
+
+        }  else if(mode==9){
+            textRenderer.beginRendering(300, 300);
+            textRenderer.setColor(Color.red);
+            textRenderer.draw("Mode: Medium" , 40, 280);
+            textRenderer.draw("Level: " +levels, 130, 10);
+
+            textRenderer.setColor(Color.WHITE);
+
+            textRenderer.endRendering();
+
+        } else if(mode==18){
+            textRenderer.beginRendering(300, 300);
+            textRenderer.setColor(Color.red);
+            textRenderer.draw("Mode: Hard" , 40, 280);
+            textRenderer.draw("Level: " +levels, 130, 10);
+
+            textRenderer.setColor(Color.WHITE);
+
+            textRenderer.endRendering();
+
+        }
 
     }
 
@@ -139,18 +171,26 @@ public class RabbitGLEventListener extends Assets {
                 break;
 
             case "Game":
-                NumberOfHits = level - mode + 2;
+//                NumberOfHits = level - mode + 2;
                 if (score == NumberOfHits) {
-                    currentScreen = level == mode+9 ? "Complete Mode" : "win";
+
+                    currentScreen = levels == mode+9 ? "Complete Mode" : "win";
 
                 } else if (lives == 0 || Timer == 0) {
                     currentScreen = "lose";
                 } else {
-                    DifficultyMode = mode == 0 ? EasyLevel : mode == 9 ? MediumLevel : HardLevel;
-                    int delay = mode == 0 ? 40 : mode == 9 ? 25 : 15;
-                    ImagesMethods.DrawParentBackground(gl, 3);
-                    drawGame(gl, delay);
-                    ImagesMethods.DrawHammer(gl, cordMouseX + 60, cordMouseY, animtionHammerIndex, 9);
+
+                    DifficultyMode = levels>= 1 && levels<= 3 ? FirstThreeLevel : levels>= 4 && levels<= 6 ? SecondThreeLevel : thirdThreeLevel;
+                    int delay = mode == 0 ? 40 : mode == 9 ? 30 : 20;
+                    if(mode==18){
+                        ImagesMethods.DrawParentBackground(gl, 4);
+                        drawGame(gl, delay);
+                        ImagesMethods.DrawHammer(gl, cordMouseX + 60, cordMouseY, animtionHammerIndex, 9);
+                    }else {
+                        ImagesMethods.DrawParentBackground(gl, 3);
+                        drawGame(gl, delay);
+                        ImagesMethods.DrawHammer(gl, cordMouseX + 60, cordMouseY, animtionHammerIndex, 9);
+                    }
                 }
                 break;
 
@@ -172,6 +212,9 @@ public class RabbitGLEventListener extends Assets {
             case "Complete Mode":
                 ImagesMethods.DrawParentBackground(gl, 9);
                 break;
+            case "Complete Hard Mode":
+                ImagesMethods.DrawParentBackground(gl, 4);
+                break;
             case "lose":
                 ImagesMethods.DrawParentBackground(gl, 12);
                 break;
@@ -179,31 +222,11 @@ public class RabbitGLEventListener extends Assets {
         }
     }
 
-    @Override
-    public void mouseMoved(MouseEvent e) {
 
-        double frameX = e.getX();
-        double frameY = e.getY();
-//        System.out.println(e.getX() + " " + e.getY());
-        Component c = e.getComponent();
-        double width = c.getWidth();
-        double height = c.getHeight();
-
-        cordMouseX = (int) ((frameX / width) * 1500); // hebat el canves
-        cordMouseY = (int) ((frameY / height) * 900); //hesbat el canves
-        cordMouseY = 900 - cordMouseY;
-        System.err.println(  "(" + cordMouseX + "," + cordMouseY + ")");
-
-        if (mouseMove) {
-            System.err.println("(cordMouseX , cordMouseY) = " + "(" + cordMouseX + "," + cordMouseY + ")");
-
-        }
-    }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        //abdelfattah
-        //action to navigate
+
         switch (currentScreen) {
             //Home page
             case "Home":
@@ -272,82 +295,290 @@ public class RabbitGLEventListener extends Assets {
                 if (cordMouseX> 590 && cordMouseX < 925 &&cordMouseY > 540 && cordMouseY < 660) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Easy";
+                    lives = 5;
                     mode = 0;
                 }
                 if (cordMouseX> 590 && cordMouseX < 925 &&cordMouseY > 360 && cordMouseY < 480) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Medium";
+                    lives = 3;
+
                     mode = 9;
                 }
                 if (cordMouseX> 590 && cordMouseX < 925 &&cordMouseY > 160 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Hard";
+                    lives = 2;
+
                     mode = 18;
 
                 }
                 break;
             //Level Selection
             case "Easy":
-            case "Medium":
-            case "Hard":
+                lives = 5;
+                Timer = 45;
+                System.out.println(lives);
                 //back button
                 if (cordMouseX> 25 && cordMouseX < 150 &&cordMouseY > 800 && cordMouseY < 885) {
                     soundObject("Sound/mouse-click-153941.wav");
+
                     currentScreen = "Play";
                 }
                 if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 500 && cordMouseY < 600) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 1 + mode;
+                    levels =1;
+                    NumberOfHits = 3;
+
                 }
                 if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 500 && cordMouseY < 600) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 2 + mode;
+                    levels =2;
+                    NumberOfHits = 4;
+
                 }
                 if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 500 && cordMouseY < 600) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 3 + mode;
+                    levels =3;
+                    NumberOfHits = 5;
+
+
                 }
                 if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 335 && cordMouseY < 435) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 4 + mode;
+                    levels =4;
+                    NumberOfHits = 6;
+
                 }
                 if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 345 && cordMouseY < 445) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 5 + mode;
+                    levels =5;
+                    NumberOfHits = 7;
+
                 }
                 if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 350 && cordMouseY < 450) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 6 + mode;
+                    levels =6;
+                    NumberOfHits = 8;
+
                 }
                 if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 180 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 7 + mode;
+                    levels =7;
+                    NumberOfHits = 9;
+
                 }
                 if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 180 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 8 + mode;
+                    levels =8;
+                    NumberOfHits = 10;
+
                 }
                 if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 180 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     level = 9 + mode;
+                    levels =9;
+                    NumberOfHits = 1;
+
 
                 }
                 break;
+
+            case "Medium":
+                lives = 3;
+                Timer = 45;
+                //back button
+                if (cordMouseX> 25 && cordMouseX < 150 &&cordMouseY > 800 && cordMouseY < 885) {
+                    soundObject("Sound/mouse-click-153941.wav");
+
+                    currentScreen = "Play";
+                }
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 500 && cordMouseY < 600) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 1 + mode;
+                    levels =1;
+                    NumberOfHits = 3;
+
+                }
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 500 && cordMouseY < 600) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 2 + mode;
+                    levels =2;
+                    NumberOfHits = 4;
+
+                }
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 500 && cordMouseY < 600) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 3 + mode;
+                    levels =3;
+                    NumberOfHits = 5;
+
+
+                }
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 335 && cordMouseY < 435) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 4 + mode;
+                    levels =4;
+                    NumberOfHits = 6;
+
+                }
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 345 && cordMouseY < 445) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 5 + mode;
+                    levels =5;
+                    NumberOfHits = 7;
+
+                }
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 350 && cordMouseY < 450) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 6 + mode;
+                    levels =6;
+                    NumberOfHits = 8;
+
+                }
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 180 && cordMouseY < 280) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 7 + mode;
+                    levels =7;
+                    NumberOfHits = 9;
+
+                }
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 180 && cordMouseY < 280) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 8 + mode;
+                    levels =8;
+                    NumberOfHits = 10;
+
+                }
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 180 && cordMouseY < 280) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 9 + mode;
+                    levels =9;
+                    NumberOfHits = 11;
+
+
+                }
+                break;
+
+
+            case "Hard":
+                lives = 2;
+                Timer = 45;
+
+                //back button
+                if (cordMouseX> 25 && cordMouseX < 150 &&cordMouseY > 800 && cordMouseY < 885) {
+                    soundObject("Sound/mouse-click-153941.wav");
+
+                    currentScreen = "Play";
+                }
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 500 && cordMouseY < 600) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 1 + mode;
+                    levels =1;
+                    NumberOfHits = 3;
+
+                }
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 500 && cordMouseY < 600) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 2 + mode;
+                    levels =2;
+                    NumberOfHits = 4;
+
+                }
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 500 && cordMouseY < 600) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 3 + mode;
+                    levels =3;
+                    NumberOfHits = 5;
+
+
+                }
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 335 && cordMouseY < 435) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 4 + mode;
+                    levels =4;
+                    NumberOfHits = 6;
+
+                }
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 345 && cordMouseY < 445) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 5 + mode;
+                    levels =5;
+                    NumberOfHits = 7;
+
+                }
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 350 && cordMouseY < 450) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 6 + mode;
+                    levels =6;
+                    NumberOfHits = 8;
+
+                }
+                if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 180 && cordMouseY < 280) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 7 + mode;
+                    levels =7;
+                    NumberOfHits = 9;
+
+                }
+                if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 180 && cordMouseY < 280) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 8 + mode;
+                    levels =8;
+                    NumberOfHits = 10;
+
+                }
+                if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 180 && cordMouseY < 280) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen = "Game";
+                    level = 9 + mode;
+                    levels =9;
+                    NumberOfHits = 11;
+
+
+                }
+                break;
+
+
             case "Complete Mode":
                 if (cordMouseX> 840 && cordMouseX < 1371 &&cordMouseY > 66 && cordMouseY < 130) {
                     soundObject("Sound/mouse-click-153941.wav");
                     score = 0;
                     Timer = 45;
-                    lives = 3;
                     level = 0;
                     currentScreen = "Play";
                 }
@@ -356,7 +587,6 @@ public class RabbitGLEventListener extends Assets {
                     soundObject("Sound/mouse-click-153941.wav");
                     score = 0;
                     Timer = 45;
-                    lives = 3;
                     level = 0;
                     currentScreen = "Home";
 
@@ -364,36 +594,55 @@ public class RabbitGLEventListener extends Assets {
 
                 break;
             case "win":
-                score = 0;
                 Timer = 45;
-                lives = 3;
                 if (cordMouseX> 845 && cordMouseX < 1370 &&cordMouseY > 68 && cordMouseY < 128) {
+                    TotalScore+=score;
+                    System.out.println("TotalScore "+TotalScore);
                     soundObject("Sound/mouse-click-153941.wav");
+                    levels++;
                     level++;
+                    NumberOfHits++;
+                    score = 0;
+
+
+//                    NumberOfHits = level+2;
                     currentScreen = "Game";
+
 
                 }
                 // back button
                 if (cordMouseX> 120 && cordMouseX < 645 &&cordMouseY > 69 && cordMouseY < 128) {
                     soundObject("Sound/mouse-click-153941.wav");
-                    level = 0;
                     currentScreen = "Home";
-
+                    TotalScore+=score;
+                    System.out.println("TotalScore "+TotalScore);
                 }
 
                 break;
             case "lose":
                 score = 0;
                 Timer = 45;
-                lives = 3;
+                level = 0;
+                levels = 1;
+                NumberOfHits = 3;
+
                 if (cordMouseX> 845 && cordMouseX < 1371 &&cordMouseY > 67 && cordMouseY < 131) {
+
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
+                    lives = mode==0?5:mode==9?3:2;
+
+                    System.out.println("currentScreen "+currentScreen);
+                    System.out.println("score "+score);
+                    System.out.println("Timer "+Timer);
+                    System.out.println("level "+level);
+                    System.out.println("lives "+lives);
+
+
                 }
                 // back to menu
                 if (cordMouseX> 122 && cordMouseX < 653 &&cordMouseY > 67 && cordMouseY < 131) {
                     soundObject("Sound/mouse-click-153941.wav");
-                    level = 0;
                     currentScreen = "Home";
                 }
 
@@ -438,7 +687,7 @@ public class RabbitGLEventListener extends Assets {
                 if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 430 && cordMouseY < 500) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
-                    Timer = 60;
+                    Timer = 45;
                     score = 0;
                     isPause = true;
                 }
@@ -448,7 +697,7 @@ public class RabbitGLEventListener extends Assets {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Home";
                     isPause = false;
-                    Timer = 60;
+                    Timer = 45;
                     score = 0;
                     mode = 0;
                 }
@@ -463,6 +712,23 @@ public class RabbitGLEventListener extends Assets {
                 break;
 
         }
+
+    }
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+        double frameX = e.getX();
+        double frameY = e.getY();
+
+        Component c = e.getComponent();
+        double width = c.getWidth();
+        double height = c.getHeight();
+
+        cordMouseX = (int) ((frameX / width) * 1500); // hebat el canves
+        cordMouseY = (int) ((frameY / height) * 900); //hesbat el canves
+        cordMouseY = 900 - cordMouseY;
+
+
 
     }
 
@@ -483,7 +749,7 @@ public class RabbitGLEventListener extends Assets {
                 System.out.println("Can't find file");
             }
         } catch (Exception e) {
-            System.out.println(e);
+           e.printStackTrace();
 
         }
     }
@@ -503,7 +769,7 @@ public class RabbitGLEventListener extends Assets {
             clip2.open(audioInput);
             clip2.start();
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
 
         }
     }
