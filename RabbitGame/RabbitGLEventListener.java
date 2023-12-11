@@ -656,7 +656,7 @@ public class RabbitGLEventListener extends Assets {
                     // x+12 => x+140
                     //  y+90  => y+155
                     //Rabbits Coordinates
-                    //Checkkk if anime
+
                     if (cordMouseX >= DifficultyMode[randomHole].x + 12 && cordMouseX <= DifficultyMode[randomHole].x + 140 && cordMouseY >= DifficultyMode[randomHole].y + 90 && cordMouseY <= DifficultyMode[randomHole].y + 155) {
                         CurrentSmashedRabbit = randomHole;
                         hitStatus = true;
