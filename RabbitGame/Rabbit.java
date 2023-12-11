@@ -39,15 +39,18 @@ public class Rabbit extends JFrame {
  }
     
     public static void main(String []args) throws SQLException {
-        DataBaseConnection db = new DataBaseConnection();
-        //new Rabbit();
-        List<Score> scoreList=db.getAllScore();
-        db.Close();
-        for(Score currentScore:scoreList){
-            System.out.println(currentScore.getUser_name());
-            System.out.println(currentScore.getScore());
+
+        new Rabbit();
+        //db.Insert("mohamed",10);
+//        DataBaseConnection db = new DataBaseConnection();
+//        List<Score> scoreList=db.getAllScore();
+//
+//        db.Close();
+//        for(Score currentScore:scoreList){
+//            System.out.println(currentScore.getUser_name());
+//            System.out.println(currentScore.getScore());
         }
     }
 
-}
+
 
