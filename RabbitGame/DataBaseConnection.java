@@ -7,11 +7,12 @@ import java.util.List;
 public class DataBaseConnection {
     private Connection connection;
     private PreparedStatement selectScore;
+    private PreparedStatement insertScore;
 
     DataBaseConnection() throws SQLException {
         connection= DriverManager.getConnection(Constant.DB_URL,Constant.USERNAME,Constant.PASSWORD);
         selectScore=connection.prepareStatement(Constant.SELECT_SCORES); //get Scores
-
+        insertScore=connection.prepareStatement(Constant.INSERT_SCORE);
 
     }
     public List <Score> getAllScore(){
@@ -35,6 +36,21 @@ public class DataBaseConnection {
         }
 
         return res;
+    }
+    public void Insert(String userName,int Score){
+        try {
+            insertScore.clearParameters();
+            insertScore.setString(1,userName);
+            insertScore.setInt(2,Score);
+            insertScore.executeQuery();
+
+
+
+        } catch (SQLException e) {
+            System.err.println("DB error: "+e.getMessage());
+        }
+
+
     }
 
     public void Close() throws SQLException {
