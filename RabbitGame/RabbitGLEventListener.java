@@ -3,8 +3,10 @@ package RabbitGame;
 import Texture.TextureReader;
 import com.sun.opengl.util.j2d.TextRenderer;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.sql.SQLException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.sound.sampled.AudioInputStream;
@@ -13,10 +15,20 @@ import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets {
+    DataBaseConnection db;
 
+    {
+        try {
+            db = new DataBaseConnection();
+        } catch (SQLException e) {
+            System.err.println("DB Error: "+e.getMessage());
+        }
+    }
+
+    List<Score> scoreList=db.getAllScore();
     boolean  hitStatus, dizzyRabbitStatus, isPause, SoundOn = true, soundButton = true;
     int score, cordMouseX, cordMouseY, delay, randomHole, level, animationIndex = 0, animationIndexDizzyRabbit = 0, indexImageSound = 5, mode, CurrentSmashedRabbit, Timer = 45, NumberOfHits = 3 , delayAnimationRabbit = 0, animtionHammerIndex = 0, responseOption = 0, lives = 3;
-    String currentScreen = "Home";
+    String currentScreen = "Score";
     Clip clip, clip2;
     int levels;
     int TotalScore;
@@ -30,7 +42,7 @@ public class RabbitGLEventListener extends Assets {
             new CordinateHoles(450, 100), new CordinateHoles(950, 200), new CordinateHoles(950, 100),
             new CordinateHoles(300, 150), new CordinateHoles(1100, 150)};
 
-    static String[] textureNames = {"Diffuclty.png", "Pause.png", "Level.png", "ssLevel.png", "llLevel.png", "soundOff.png", "soundOn.png", "win.png", "mm.png", "tt.png", "1.png", "2.png", "3.png", "4.png", "back.png", "backg.png"};
+    static String[] textureNames = {"Diffuclty.png", "Pause.png", "Level.png", "ssLevel.png", "llLevel.png", "soundOff.png", "soundOn.png", "win.png", "mm.png", "tt.png", "1.png", "2.png", "3.png", "4.png", "back.png", "Score.png","backg.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
     static int[] textures = new int[textureNames.length];
 
@@ -65,7 +77,11 @@ public class RabbitGLEventListener extends Assets {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
 
-        switchBetweenScreens(gl);
+        try {
+            switchBetweenScreens(gl);
+        } catch (SQLException e) {
+            System.err.println("DB Error: "+e.getMessage());
+        }
 
     }
 
@@ -152,7 +168,7 @@ public class RabbitGLEventListener extends Assets {
 
     //abdelfattah:Edit switch
     // Wafdy:this method for moving from screen to anthor screen (Navigator)
-    public void switchBetweenScreens(GL gl) {
+    public void switchBetweenScreens(GL gl) throws SQLException {
         //abdelfattah
         //draw page
         switch (currentScreen) {
@@ -202,6 +218,7 @@ public class RabbitGLEventListener extends Assets {
                 ImagesMethods.DrawParentBackground(gl, 13);
 
                 break;
+
             case "Pause":
                 ImagesMethods.DrawParentBackground(gl, 1);
 
@@ -217,6 +234,10 @@ public class RabbitGLEventListener extends Assets {
                 break;
             case "lose":
                 ImagesMethods.DrawParentBackground(gl, 12);
+                break;
+            case "Score":
+                ImagesMethods.DrawParentBackground(gl, 15);
+                printScore();
                 break;
 
         }
@@ -710,6 +731,12 @@ public class RabbitGLEventListener extends Assets {
                     }
                 }
                 break;
+            case "Score":
+                if (cordMouseX> 13 && cordMouseX < 66 &&cordMouseY > 833 && cordMouseY < 890) {
+                    soundObject("Sound/mouse-click-153941.wav");
+                    currentScreen="Home";
+                }
+                break;
 
         }
 
@@ -724,17 +751,43 @@ public class RabbitGLEventListener extends Assets {
         double width = c.getWidth();
         double height = c.getHeight();
 
-        cordMouseX = (int) ((frameX / width) * 1500); // hebat el canves
-        cordMouseY = (int) ((frameY / height) * 900); //hesbat el canves
+        cordMouseX = (int) ((frameX / width) * 1500);
+        cordMouseY = (int) ((frameY / height) * 900);
         cordMouseY = 900 - cordMouseY;
 
-
+    //    System.out.println("("+cordMouseX+", "+cordMouseY+")");
 
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
         animtionHammerIndex = 0;
+    }
+
+
+    public void printScore() throws SQLException {
+
+
+
+
+        int playerNameCordX=40,CordY=280,ScoreCordX=200;
+
+        textRenderer.beginRendering(300, 300);
+        textRenderer.setColor(Color.BLACK);
+
+        textRenderer.draw("PlayerName" , playerNameCordX, CordY);
+        textRenderer.draw("Score:", ScoreCordX, CordY);
+
+        for(int i=0;i<5;i++){
+            CordY=CordY-30;
+            textRenderer.draw(scoreList.get(i).getUser_name() , playerNameCordX+5, CordY);
+
+            textRenderer.draw(Integer.toString(scoreList.get(i).getScore()), ScoreCordX+5, CordY);
+        }
+
+        textRenderer.setColor(Color.WHITE);
+        textRenderer.endRendering();
+        db.Close();
     }
 
     public void PlayMusic(String location) {
