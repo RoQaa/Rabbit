@@ -124,10 +124,7 @@ public class RabbitGLEventListener extends Assets {
                 dizzyRabbitStatus = false;
             }
         } else {
-            if (randomHole > DifficultyMode.length) {
-                randomHole = (int) (Math.random() * DifficultyMode.length);
-                System.out.println("randomHole inside status "+randomHole);
-            }
+
             animationIndex = 3;
             ImagesMethods.DrawRabbitInHole(gl, DifficultyMode[randomHole].x, DifficultyMode[randomHole].y, animationIndex, 10);
         }
@@ -349,7 +346,7 @@ public class RabbitGLEventListener extends Assets {
             case "Easy":
                 lives = 5;
                 Timer = 45;
-                System.out.println(lives);
+              //  System.out.println(lives);
                 //back button
                 if (cordMouseX> 25 && cordMouseX < 150 &&cordMouseY > 800 && cordMouseY < 885) {
                     soundObject("Sound/mouse-click-153941.wav");
@@ -629,7 +626,7 @@ public class RabbitGLEventListener extends Assets {
                 Timer = 45;
                 if (cordMouseX> 845 && cordMouseX < 1370 &&cordMouseY > 68 && cordMouseY < 128) {
                     TotalScore+=score;
-                    System.out.println("TotalScore "+TotalScore);
+
                     soundObject("Sound/mouse-click-153941.wav");
                     levels++;
                     level++;
@@ -643,10 +640,11 @@ public class RabbitGLEventListener extends Assets {
                 if (cordMouseX> 120 && cordMouseX < 645 &&cordMouseY > 69 && cordMouseY < 128) {
                     TotalScore+=score;
                     db.Update(this.PlayerName,TotalScore);
+                    score=0;
                     soundObject("Sound/mouse-click-153941.wav");
-
-                    System.out.println("TotalScore "+TotalScore);
                     currentScreen = "Home";
+//                    level=1;
+                    TotalScore=0;
 
                 }
 
@@ -710,6 +708,7 @@ public class RabbitGLEventListener extends Assets {
 
                 //Repaly button
                 if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 430 && cordMouseY < 500) {
+                    db.Update(this.PlayerName,TotalScore);
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     Timer = 45;
@@ -718,7 +717,7 @@ public class RabbitGLEventListener extends Assets {
                     isPause = true;
                    NumberOfHits=3;
                    levels=1;
-
+                    TotalScore=0;
                   lives = mode==0?5:mode==9?3:2;
 
                 }
