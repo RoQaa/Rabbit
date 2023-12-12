@@ -346,7 +346,6 @@ public class RabbitGLEventListener extends Assets {
             case "Easy":
                 lives = 5;
                 Timer = 45;
-              //  System.out.println(lives);
                 //back button
                 if (cordMouseX> 25 && cordMouseX < 150 &&cordMouseY > 800 && cordMouseY < 885) {
                     soundObject("Sound/mouse-click-153941.wav");
@@ -617,6 +616,7 @@ public class RabbitGLEventListener extends Assets {
                     score = 0;
                     Timer = 45;
                     level = 0;
+                    TotalScore = 0;
                     currentScreen = "Home";
 
                 }
@@ -643,7 +643,6 @@ public class RabbitGLEventListener extends Assets {
                     score=0;
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Home";
-//                    level=1;
                     TotalScore=0;
 
                 }
@@ -657,9 +656,13 @@ public class RabbitGLEventListener extends Assets {
                 NumberOfHits = 3;
 
                 if (cordMouseX> 845 && cordMouseX < 1371 &&cordMouseY > 67 && cordMouseY < 131) {
+                    db.Update(this.PlayerName,TotalScore);
+
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
-                    lives = mode==0?5:mode==9?3:2;
+                    lives = mode==0?5:mode==9?3:2; //number of lives
+                    TotalScore=0;
+                    System.out.println("total score in again"+TotalScore);
 
                 }
                 // back to menu
@@ -667,6 +670,10 @@ public class RabbitGLEventListener extends Assets {
                     db.Update(this.PlayerName,TotalScore);
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Home";
+                    System.out.println("total score in home"+TotalScore);
+
+                    TotalScore=0;
+
                 }
 
                 break;
@@ -725,11 +732,13 @@ public class RabbitGLEventListener extends Assets {
                 // home button
                 if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 320 && cordMouseY < 400) {
                     soundObject("Sound/mouse-click-153941.wav");
+                    db.Update(this.PlayerName,TotalScore);
                     currentScreen = "Home";
                     isPause = false;
                     Timer = 45;
                     score = 0;
                     mode = 0;
+                    TotalScore = 0;
                 }
                 if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 110 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
