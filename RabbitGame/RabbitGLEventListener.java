@@ -9,12 +9,16 @@ import java.io.File;
 import java.sql.SQLException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
+import javax.media.opengl.GLCanvas;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets {
+
+GLCanvas glc;
+    public String PlayerName;
     DataBaseConnection db;
 
     {
@@ -25,12 +29,14 @@ public class RabbitGLEventListener extends Assets {
         }
     }
 
-    List<Score> scoreList=db.getAllScore();
+    List<Score> scoreList;
     boolean  hitStatus, dizzyRabbitStatus, isPause, SoundOn = true, soundButton = true;
     int score, cordMouseX, cordMouseY, delay, randomHole, level, animationIndex = 0, animationIndexDizzyRabbit = 0, indexImageSound = 5, mode, CurrentSmashedRabbit, Timer = 45, NumberOfHits = 3 , delayAnimationRabbit = 0, animtionHammerIndex = 0, responseOption = 0, lives = 3;
-    String currentScreen = "Score";
+    String currentScreen = "Home";
     Clip clip, clip2;
     int levels;
+
+
     int TotalScore;
 
     CordinateHoles[] DifficultyMode;
@@ -59,8 +65,10 @@ public class RabbitGLEventListener extends Assets {
     static int[] texturesHammer = new int[textureNamesHammer.length];
 
     public void init(GLAutoDrawable gld) {
+
         GL gl = gld.getGL();
         gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+
         ImagesMethods.StoreImages(gl, textureNames, texture, textures, assetsFolderName);
         ImagesMethods.StoreImages(gl, textureNamesRabbit, textureRabbit, texturesRabbit, assetsFolderRabbit);
         ImagesMethods.StoreImages(gl, textureNamesDizzyRabbit, textureDizzyRabbit, texturesDizzyRabbit, assetsFolderRabbit);
@@ -73,12 +81,14 @@ public class RabbitGLEventListener extends Assets {
 
     @Override
     public void display(GLAutoDrawable glad) {
+
         GL gl = glad.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
 
         try {
             switchBetweenScreens(gl);
+
         } catch (SQLException e) {
             System.err.println("DB Error: "+e.getMessage());
         }
@@ -171,6 +181,7 @@ public class RabbitGLEventListener extends Assets {
     public void switchBetweenScreens(GL gl) throws SQLException {
         //abdelfattah
         //draw page
+
         switch (currentScreen) {
             case "Home": {
                 ImagesMethods.DrawParentBackground(gl, textures.length - 1);
@@ -251,6 +262,7 @@ public class RabbitGLEventListener extends Assets {
         switch (currentScreen) {
             //Home page
             case "Home":
+
                 // sound
                 if (cordMouseX> 1320 && cordMouseX < 1480 &&cordMouseY > 760 && cordMouseY < 870) {
                     SoundOn = !SoundOn;
@@ -284,6 +296,12 @@ public class RabbitGLEventListener extends Assets {
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
                             "Exit", JOptionPane.YES_NO_OPTION);
                     if (responseOption == JOptionPane.YES_OPTION) {
+                        try {
+                            db.Close();
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
+
                         System.exit(0);
                     }
                 }
@@ -605,6 +623,7 @@ public class RabbitGLEventListener extends Assets {
                 }
                 // back button
                 if (cordMouseX> 125 && cordMouseX < 650 &&cordMouseY > 66 && cordMouseY < 130) {
+                    db.Update(this.PlayerName,TotalScore);
                     soundObject("Sound/mouse-click-153941.wav");
                     score = 0;
                     Timer = 45;
@@ -633,10 +652,15 @@ public class RabbitGLEventListener extends Assets {
                 }
                 // back button
                 if (cordMouseX> 120 && cordMouseX < 645 &&cordMouseY > 69 && cordMouseY < 128) {
-                    soundObject("Sound/mouse-click-153941.wav");
-                    currentScreen = "Home";
                     TotalScore+=score;
+                    db.Update(this.PlayerName,TotalScore);
+                    soundObject("Sound/mouse-click-153941.wav");
+
+
+
                     System.out.println("TotalScore "+TotalScore);
+                    currentScreen = "Home";
+
                 }
 
                 break;
@@ -654,6 +678,7 @@ public class RabbitGLEventListener extends Assets {
                     lives = mode==0?5:mode==9?3:2;
 
                     System.out.println("currentScreen "+currentScreen);
+                    System.out.println("total Score"+TotalScore);
                     System.out.println("score "+score);
                     System.out.println("Timer "+Timer);
                     System.out.println("level "+level);
@@ -663,7 +688,10 @@ public class RabbitGLEventListener extends Assets {
                 }
                 // back to menu
                 if (cordMouseX> 122 && cordMouseX < 653 &&cordMouseY > 67 && cordMouseY < 131) {
+                    db.Update(this.PlayerName,TotalScore);
                     soundObject("Sound/mouse-click-153941.wav");
+
+
                     currentScreen = "Home";
                 }
 
@@ -727,6 +755,11 @@ public class RabbitGLEventListener extends Assets {
                     responseOption = JOptionPane.showConfirmDialog(this, "Are you sure to exit?",
                             "Exit", JOptionPane.YES_NO_OPTION);
                     if (responseOption == JOptionPane.YES_OPTION) {
+                        try {
+                            db.Close();
+                        } catch (SQLException ex) {
+                            throw new RuntimeException(ex);
+                        }
                         System.exit(0);
                     }
                 }
@@ -768,26 +801,41 @@ public class RabbitGLEventListener extends Assets {
     public void printScore() throws SQLException {
 
 
+      scoreList=db.getAllScore();
 
 
-        int playerNameCordX=40,CordY=280,ScoreCordX=200;
+
+        int playerNameCordX = 40, CordY = 280, ScoreCordX = 200;
 
         textRenderer.beginRendering(300, 300);
         textRenderer.setColor(Color.BLACK);
 
-        textRenderer.draw("PlayerName" , playerNameCordX, CordY);
+        textRenderer.draw("PlayerName", playerNameCordX, CordY);
         textRenderer.draw("Score:", ScoreCordX, CordY);
 
-        for(int i=0;i<5;i++){
-            CordY=CordY-30;
-            textRenderer.draw(scoreList.get(i).getUser_name() , playerNameCordX+5, CordY);
+        if(scoreList.size()<9) {
+            for (int i = 0; i < scoreList.size(); i++) {
+                CordY = CordY - 30;
+                textRenderer.draw(scoreList.get(i).getUser_name(), playerNameCordX + 5, CordY);
 
-            textRenderer.draw(Integer.toString(scoreList.get(i).getScore()), ScoreCordX+5, CordY);
+                textRenderer.draw(Integer.toString(scoreList.get(i).getScore()), ScoreCordX + 5, CordY);
+            }
+
+        }
+        else{
+            for (int i = 0; i <9; i++) {
+                CordY = CordY - 30;
+                textRenderer.draw(scoreList.get(i).getUser_name(), playerNameCordX + 5, CordY);
+
+                textRenderer.draw(Integer.toString(scoreList.get(i).getScore()), ScoreCordX + 5, CordY);
+            }
+
         }
 
         textRenderer.setColor(Color.WHITE);
         textRenderer.endRendering();
-        db.Close();
+
+        //db.Close();
     }
 
     public void PlayMusic(String location) {
@@ -825,6 +873,13 @@ public class RabbitGLEventListener extends Assets {
             e.printStackTrace();
 
         }
+    }
+    public String getPlayerName() {
+        return PlayerName;
+    }
+
+    public void setPlayerName(String playerName) {
+        PlayerName = playerName;
     }
 
 }

@@ -11,12 +11,27 @@ import javax.swing.*;
 
 
 public class Rabbit extends JFrame {
+    private  static JTextField textField;
 
-    Rabbit(){
+
+    Rabbit() throws SQLException {
+
+
+
         GLCanvas glcanvas;
         Animator animator;
 
         RabbitGLEventListener listener = new RabbitGLEventListener();
+        DataBaseConnection db=new DataBaseConnection();
+        textField=new JTextField("PlayerName");
+        JOptionPane.showMessageDialog(null,textField);
+        listener.setPlayerName(textField.getText());
+        if(!db.checkPlayer(textField.getText())){
+            db.Insert(listener.getPlayerName(),0);
+        db.Close();
+        }
+
+
         glcanvas = new GLCanvas();
         glcanvas.addGLEventListener(listener);
         glcanvas.addKeyListener(listener);
@@ -29,6 +44,7 @@ public class Rabbit extends JFrame {
         animator = new FPSAnimator(30);
         animator.add(glcanvas);
         animator.start();
+
         setTitle("Rabbit");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(1500, 900);
@@ -41,6 +57,7 @@ public class Rabbit extends JFrame {
     public static void main(String []args) throws SQLException {
 
         new Rabbit();
+
         //db.Insert("mohamed",10);
 //        DataBaseConnection db = new DataBaseConnection();
 //        List<Score> scoreList=db.getAllScore();
