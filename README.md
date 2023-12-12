@@ -42,6 +42,7 @@ INSERT INTO hr.score (USER_NAME, SCORE) VALUES ('player2', 0);
 -- Add more entries as needed
 !---Now, you're ready to run and enjoy RabbitGame.Rabbit!---!
 ### Contributors:
+```bash
 1-Farouk Adel
 2-Manar Adel
 3-Mahmoud Wafdy
