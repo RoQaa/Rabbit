@@ -20,7 +20,7 @@ Follow these steps to set up and build the game:
 
 - Clone the repository:
   ```bash
-  git clone https://github.com/your-username/RabbitGame.Rabbit.git
+  git clone https://github.com/RoQaa/Rabbit.git
 
 ### Configuration:
 1.Open `InterFace Constant.java`
