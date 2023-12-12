@@ -9,15 +9,12 @@ import java.io.File;
 import java.sql.SQLException;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
-import javax.media.opengl.GLCanvas;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 
 public class RabbitGLEventListener extends Assets {
-
-GLCanvas glc;
     public String PlayerName;
     DataBaseConnection db;
 
@@ -31,22 +28,20 @@ GLCanvas glc;
 
     List<Score> scoreList;
     boolean  hitStatus, dizzyRabbitStatus, isPause, SoundOn = true, soundButton = true;
-    int score, cordMouseX, cordMouseY, delay, randomHole, level, animationIndex = 0, animationIndexDizzyRabbit = 0, indexImageSound = 5, mode, CurrentSmashedRabbit, Timer = 45, NumberOfHits = 3 , delayAnimationRabbit = 0, animtionHammerIndex = 0, responseOption = 0, lives = 3;
+    int score, cordMouseX, cordMouseY, delay, randomHole,levels, level,TotalScore, animationIndex = 0, animationIndexDizzyRabbit = 0, indexImageSound = 5, mode, CurrentSmashedRabbit, Timer = 45, NumberOfHits = 3 , delayAnimationRabbit = 0, animtionHammerIndex = 0, responseOption = 0, lives = 3;
     String currentScreen = "Home";
     Clip clip, clip2;
-    int levels;
 
-
-    int TotalScore;
 
     CordinateHoles[] DifficultyMode;
     TextRenderer textRenderer = new TextRenderer(new Font("sanaSerif", Font.BOLD, 10)); // 10 --> FONT_SIZE
 
     CordinateHoles[] FirstThreeLevel = {new CordinateHoles(750, 150), new CordinateHoles(600, 100), new CordinateHoles(450, 150)};
-    CordinateHoles[] SecondThreeLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100), new CordinateHoles(450, 100), new CordinateHoles(950, 200), new CordinateHoles(950, 100)};
+    CordinateHoles[] SecondThreeLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100),
+                                        new CordinateHoles(450, 100), new CordinateHoles(950, 200), new CordinateHoles(950, 100)};
     CordinateHoles[] thirdThreeLevel = {new CordinateHoles(700, 200), new CordinateHoles(450, 200), new CordinateHoles(700, 100),
-            new CordinateHoles(450, 100), new CordinateHoles(950, 200), new CordinateHoles(950, 100),
-            new CordinateHoles(300, 150), new CordinateHoles(1100, 150)};
+                                        new CordinateHoles(450, 100), new CordinateHoles(950, 200), new CordinateHoles(950, 100),
+                                        new CordinateHoles(300, 150), new CordinateHoles(1100, 150)};
 
     static String[] textureNames = {"Diffuclty.png", "Pause.png", "Level.png", "ssLevel.png", "llLevel.png", "soundOff.png", "soundOn.png", "win.png", "mm.png", "tt.png", "1.png", "2.png", "3.png", "4.png", "back.png", "Score.png","backg.png"};
     TextureReader.Texture[] texture = new TextureReader.Texture[textureNames.length];
@@ -99,8 +94,9 @@ GLCanvas glc;
         for (CordinateHoles cordinateHoles : DifficultyMode) {
             ImagesMethods.DrawRabbitInHole(gl, cordinateHoles.x, cordinateHoles.y, 0, 10); //out
         }
-        if (randomHole > DifficultyMode.length) {
-            randomHole = (int) (Math.random() * DifficultyMode.length);
+
+        if (randomHole >= DifficultyMode.length) {
+            randomHole = (int) (Math.random() * (DifficultyMode.length));
         }
         delay++;
         if (delay > delaySpeed) {
@@ -128,6 +124,10 @@ GLCanvas glc;
                 dizzyRabbitStatus = false;
             }
         } else {
+            if (randomHole > DifficultyMode.length) {
+                randomHole = (int) (Math.random() * DifficultyMode.length);
+                System.out.println("randomHole inside status "+randomHole);
+            }
             animationIndex = 3;
             ImagesMethods.DrawRabbitInHole(gl, DifficultyMode[randomHole].x, DifficultyMode[randomHole].y, animationIndex, 10);
         }
@@ -176,11 +176,7 @@ GLCanvas glc;
 
     }
 
-    //abdelfattah:Edit switch
-    // Wafdy:this method for moving from screen to anthor screen (Navigator)
     public void switchBetweenScreens(GL gl) throws SQLException {
-        //abdelfattah
-        //draw page
 
         switch (currentScreen) {
             case "Home": {
@@ -198,10 +194,8 @@ GLCanvas glc;
                 break;
 
             case "Game":
-//                NumberOfHits = level - mode + 2;
                 if (score == NumberOfHits) {
-
-                    currentScreen = levels == mode+9 ? "Complete Mode" : "win";
+                    currentScreen = level == mode+9 ? "Complete Mode" : "win";
 
                 } else if (lives == 0 || Timer == 0) {
                     currentScreen = "lose";
@@ -240,9 +234,7 @@ GLCanvas glc;
             case "Complete Mode":
                 ImagesMethods.DrawParentBackground(gl, 9);
                 break;
-            case "Complete Hard Mode":
-                ImagesMethods.DrawParentBackground(gl, 4);
-                break;
+
             case "lose":
                 ImagesMethods.DrawParentBackground(gl, 12);
                 break;
@@ -434,7 +426,7 @@ GLCanvas glc;
                     currentScreen = "Game";
                     level = 9 + mode;
                     levels =9;
-                    NumberOfHits = 1;
+                    NumberOfHits = 11;
 
 
                 }
@@ -643,20 +635,15 @@ GLCanvas glc;
                     level++;
                     NumberOfHits++;
                     score = 0;
-
-
-//                    NumberOfHits = level+2;
                     currentScreen = "Game";
 
-
                 }
+
                 // back button
                 if (cordMouseX> 120 && cordMouseX < 645 &&cordMouseY > 69 && cordMouseY < 128) {
                     TotalScore+=score;
                     db.Update(this.PlayerName,TotalScore);
                     soundObject("Sound/mouse-click-153941.wav");
-
-
 
                     System.out.println("TotalScore "+TotalScore);
                     currentScreen = "Home";
@@ -672,26 +659,15 @@ GLCanvas glc;
                 NumberOfHits = 3;
 
                 if (cordMouseX> 845 && cordMouseX < 1371 &&cordMouseY > 67 && cordMouseY < 131) {
-
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
                     lives = mode==0?5:mode==9?3:2;
-
-                    System.out.println("currentScreen "+currentScreen);
-                    System.out.println("total Score"+TotalScore);
-                    System.out.println("score "+score);
-                    System.out.println("Timer "+Timer);
-                    System.out.println("level "+level);
-                    System.out.println("lives "+lives);
-
 
                 }
                 // back to menu
                 if (cordMouseX> 122 && cordMouseX < 653 &&cordMouseY > 67 && cordMouseY < 131) {
                     db.Update(this.PlayerName,TotalScore);
                     soundObject("Sound/mouse-click-153941.wav");
-
-
                     currentScreen = "Home";
                 }
 
@@ -705,7 +681,6 @@ GLCanvas glc;
                     // x+12 => x+140
                     //  y+90  => y+155
                     //Rabbits Coordinates
-
                     if (cordMouseX >= DifficultyMode[randomHole].x + 12 && cordMouseX <= DifficultyMode[randomHole].x + 140 && cordMouseY >= DifficultyMode[randomHole].y + 90 && cordMouseY <= DifficultyMode[randomHole].y + 155) {
                         CurrentSmashedRabbit = randomHole;
                         hitStatus = true;
@@ -729,6 +704,7 @@ GLCanvas glc;
                 if (cordMouseX> 600 && cordMouseX < 800 &&cordMouseY > 540 && cordMouseY < 615) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Game";
+
                     isPause = true;
                 }
 
@@ -738,7 +714,13 @@ GLCanvas glc;
                     currentScreen = "Game";
                     Timer = 45;
                     score = 0;
+                    System.out.println("pause");
                     isPause = true;
+                   NumberOfHits=3;
+                   levels=1;
+
+                  lives = mode==0?5:mode==9?3:2;
+
                 }
 
                 // home button
@@ -788,8 +770,6 @@ GLCanvas glc;
         cordMouseY = (int) ((frameY / height) * 900);
         cordMouseY = 900 - cordMouseY;
 
-    //    System.out.println("("+cordMouseX+", "+cordMouseY+")");
-
     }
 
     @Override
@@ -799,11 +779,7 @@ GLCanvas glc;
 
 
     public void printScore() throws SQLException {
-
-
       scoreList=db.getAllScore();
-
-
 
         int playerNameCordX = 40, CordY = 280, ScoreCordX = 200;
 
