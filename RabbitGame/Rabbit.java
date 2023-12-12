@@ -16,8 +16,6 @@ public class Rabbit extends JFrame {
 
     Rabbit() throws SQLException {
 
-
-
         GLCanvas glcanvas;
         Animator animator;
 
@@ -34,12 +32,9 @@ public class Rabbit extends JFrame {
 
         glcanvas = new GLCanvas();
         glcanvas.addGLEventListener(listener);
-        glcanvas.addKeyListener(listener);
         glcanvas.addMouseListener(listener);
         glcanvas.addMouseMotionListener(listener);
         listener.setGLCanvas(glcanvas);
-
-
         getContentPane().add(glcanvas, BorderLayout.CENTER);
         animator = new FPSAnimator(30);
         animator.add(glcanvas);

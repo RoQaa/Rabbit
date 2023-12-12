@@ -71,12 +71,10 @@ public class RabbitGLEventListener extends Assets {
 
         String filepath = "Sound/Run-Amok(chosic.com).wav";
         PlayMusic(filepath);
-
     }
 
     @Override
     public void display(GLAutoDrawable glad) {
-
         GL gl = glad.getGL();
         gl.glClear(GL.GL_COLOR_BUFFER_BIT);       //Clear The Screen And The Depth Buffer
         gl.glLoadIdentity();
@@ -140,6 +138,7 @@ public class RabbitGLEventListener extends Assets {
         textRenderer.draw("Remaining Time: " + Timer, 5, 10);
         textRenderer.setColor(Color.WHITE);
         textRenderer.endRendering();
+
         if(mode==0){
             textRenderer.beginRendering(300, 300);
             textRenderer.setColor(Color.red);
@@ -204,7 +203,8 @@ public class RabbitGLEventListener extends Assets {
                         ImagesMethods.DrawParentBackground(gl, 4);
                         drawGame(gl, delay);
                         ImagesMethods.DrawHammer(gl, cordMouseX + 60, cordMouseY, animtionHammerIndex, 9);
-                    }else {
+                    }
+                    else {
                         ImagesMethods.DrawParentBackground(gl, 3);
                         drawGame(gl, delay);
                         ImagesMethods.DrawHammer(gl, cordMouseX + 60, cordMouseY, animtionHammerIndex, 9);
@@ -330,16 +330,13 @@ public class RabbitGLEventListener extends Assets {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Medium";
                     lives = 3;
-
                     mode = 9;
                 }
                 if (cordMouseX> 590 && cordMouseX < 925 &&cordMouseY > 160 && cordMouseY < 280) {
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Hard";
                     lives = 2;
-
                     mode = 18;
-
                 }
                 break;
             //Level Selection
@@ -423,9 +420,8 @@ public class RabbitGLEventListener extends Assets {
                     level = 9 + mode;
                     levels =9;
                     NumberOfHits = 11;
-
-
                 }
+
                 break;
 
             case "Medium":
@@ -459,8 +455,6 @@ public class RabbitGLEventListener extends Assets {
                     level = 3 + mode;
                     levels =3;
                     NumberOfHits = 5;
-
-
                 }
                 if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 335 && cordMouseY < 435) {
                     soundObject("Sound/mouse-click-153941.wav");
@@ -476,7 +470,6 @@ public class RabbitGLEventListener extends Assets {
                     level = 5 + mode;
                     levels =5;
                     NumberOfHits = 7;
-
                 }
                 if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 350 && cordMouseY < 450) {
                     soundObject("Sound/mouse-click-153941.wav");
@@ -508,11 +501,8 @@ public class RabbitGLEventListener extends Assets {
                     level = 9 + mode;
                     levels =9;
                     NumberOfHits = 11;
-
-
                 }
                 break;
-
 
             case "Hard":
                 lives = 2;
@@ -521,7 +511,6 @@ public class RabbitGLEventListener extends Assets {
                 //back button
                 if (cordMouseX> 25 && cordMouseX < 150 &&cordMouseY > 800 && cordMouseY < 885) {
                     soundObject("Sound/mouse-click-153941.wav");
-
                     currentScreen = "Play";
                 }
                 if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 500 && cordMouseY < 600) {
@@ -546,8 +535,6 @@ public class RabbitGLEventListener extends Assets {
                     level = 3 + mode;
                     levels =3;
                     NumberOfHits = 5;
-
-
                 }
                 if (cordMouseX> 460 && cordMouseX < 630 &&cordMouseY > 335 && cordMouseY < 435) {
                     soundObject("Sound/mouse-click-153941.wav");
@@ -555,7 +542,6 @@ public class RabbitGLEventListener extends Assets {
                     level = 4 + mode;
                     levels =4;
                     NumberOfHits = 6;
-
                 }
                 if (cordMouseX> 770 && cordMouseX < 935 &&cordMouseY > 345 && cordMouseY < 445) {
                     soundObject("Sound/mouse-click-153941.wav");
@@ -563,7 +549,6 @@ public class RabbitGLEventListener extends Assets {
                     level = 5 + mode;
                     levels =5;
                     NumberOfHits = 7;
-
                 }
                 if (cordMouseX> 1035 && cordMouseX < 1205 &&cordMouseY > 350 && cordMouseY < 450) {
                     soundObject("Sound/mouse-click-153941.wav");
@@ -595,8 +580,6 @@ public class RabbitGLEventListener extends Assets {
                     level = 9 + mode;
                     levels =9;
                     NumberOfHits = 11;
-
-
                 }
                 break;
 
@@ -626,7 +609,6 @@ public class RabbitGLEventListener extends Assets {
                 Timer = 45;
                 if (cordMouseX> 845 && cordMouseX < 1370 &&cordMouseY > 68 && cordMouseY < 128) {
                     TotalScore+=score;
-
                     soundObject("Sound/mouse-click-153941.wav");
                     levels++;
                     level++;
@@ -662,21 +644,16 @@ public class RabbitGLEventListener extends Assets {
                     currentScreen = "Game";
                     lives = mode==0?5:mode==9?3:2; //number of lives
                     TotalScore=0;
-                    System.out.println("total score in again"+TotalScore);
-
                 }
                 // back to menu
                 if (cordMouseX> 122 && cordMouseX < 653 &&cordMouseY > 67 && cordMouseY < 131) {
                     db.Update(this.PlayerName,TotalScore);
                     soundObject("Sound/mouse-click-153941.wav");
                     currentScreen = "Home";
-                    System.out.println("total score in home"+TotalScore);
-
                     TotalScore=0;
-
                 }
-
                 break;
+
             case "Game":
                 if (cordMouseX> 15 && cordMouseX < 115 &&cordMouseY > 780 && cordMouseY < 880) {
                     soundObject("Sound/mouse-click-153941.wav");
@@ -720,7 +697,6 @@ public class RabbitGLEventListener extends Assets {
                     currentScreen = "Game";
                     Timer = 45;
                     score = 0;
-                    System.out.println("pause");
                     isPause = true;
                    NumberOfHits=3;
                    levels=1;
@@ -766,18 +742,14 @@ public class RabbitGLEventListener extends Assets {
     }
     @Override
     public void mouseMoved(MouseEvent e) {
-
         double frameX = e.getX();
         double frameY = e.getY();
-
         Component c = e.getComponent();
         double width = c.getWidth();
         double height = c.getHeight();
-
         cordMouseX = (int) ((frameX / width) * 1500);
         cordMouseY = (int) ((frameY / height) * 900);
         cordMouseY = 900 - cordMouseY;
-
     }
 
     @Override
@@ -815,11 +787,8 @@ public class RabbitGLEventListener extends Assets {
             }
 
         }
-
         textRenderer.setColor(Color.WHITE);
         textRenderer.endRendering();
-
-        //db.Close();
     }
 
     public void PlayMusic(String location) {
