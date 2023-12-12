@@ -32,21 +32,22 @@ Create a table named hr.score in your Oracle  11g Express Edittion.
 Insert initial values into the table with the columns `USER_NAME` and `SCORE`.
 
 ### Example SQL:
-CREATE TABLE hr.score (
-    USER_NAME VARCHAR2(255),
-    SCORE NUMBER
-);
+   ```bash
+   CREATE TABLE hr.score (
+       USER_NAME VARCHAR2(255),
+       SCORE NUMBER
+   );
 
 INSERT INTO hr.score (USER_NAME, SCORE) VALUES ('player1', 0);
 INSERT INTO hr.score (USER_NAME, SCORE) VALUES ('player2', 0);
 -- Add more entries as needed
 !---Now, you're ready to run and enjoy RabbitGame.Rabbit!---!
 ### Contributors:
-```bash
-1-Farouk Adel
-2-Manar Adel
-3-Mahmoud Wafdy
-4- AbdellFattah Hesham
+   ```bash
+   1-Farouk Adel
+   2-Manar Adel
+   3-Mahmoud Wafdy
+   4- AbdellFattah Hesham
 
 ### License:
 This project is licensed under the MIT License.
