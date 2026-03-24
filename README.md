@@ -50,7 +50,7 @@ Insert initial values into the table with the columns `USER_NAME` and `SCORE`.
       1-Farouk Adel
       2-Manar Adel
       3-Mahmoud Wafdy
-      4- AbdellFattah Hesham
+      4-AbdellFattah Hesham
 
 ### License:
 This project is licensed under the MIT License.
